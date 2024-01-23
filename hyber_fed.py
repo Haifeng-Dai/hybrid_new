@@ -174,7 +174,7 @@ for server_epoch in range(server_epochs):
         acc_ += eval_model(client_list[0], test_loader[i])
     acc_server.append(acc_ / n_client)
 
-save_path = f'./res/fedavg_seed{seed}_alpha_{alpha}_dataset_{dataset}_model_structure_{model_structure}/'
+save_path = f'./res/fedavg_seed_{seed}_alpha_{alpha}_dataset_{dataset}_model_structure_{model_structure}/'
 file_name = save_path + \
     f'n_client_{n_client}_' + \
     f'n_train_data_{n_train_data}_' + \
