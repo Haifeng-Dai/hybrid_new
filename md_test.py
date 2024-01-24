@@ -87,6 +87,8 @@ in_channel = data_set.in_channel
 n_targets = data_set.n_targets
 pro = Dirichlet(torch.full(size=(data_set.n_targets,),
                            fill_value=float(alpha))).sample([n_client])
+msg = '\n' + str(pro) + '\n' + str(pro * n_train_data)
+log.info(msg)
 train_set = split_non_iid(
     dataset=data_set.train_set,
     pro=pro,

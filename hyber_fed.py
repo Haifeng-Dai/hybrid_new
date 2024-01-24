@@ -54,8 +54,6 @@ os.environ['CUDA_VISIBLE_DEVICES'] = str(args.device)
 
 setup_seed(seed)
 all_client = range(n_client)
-acc = {i: [] for i in all_client}
-acc_server = []
 server_client = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
 
 message = 'fed_avg' + f"\n\
@@ -141,6 +139,8 @@ CE_Loss = nn.CrossEntropyLoss().cuda()
 
 
 '''5. model training and distillation'''
+acc = {i: [] for i in all_client}
+acc_server = deepcopy(acc)
 for server_epoch in range(server_epochs):
     # local train
     msg_local = '[server epoch {}, client {}, local train]'
@@ -168,11 +168,15 @@ for server_epoch in range(server_epochs):
         client_list_.append(deepcopy(client_))
     client_list = deepcopy(client_list_)
 
-    client_list = aggregate(model_list=client_list_)
-    acc_ = 0
-    for i in all_client:
-        acc_ += eval_model(client_list[0], test_loader[i])
-    acc_server.append(acc_ / n_client)
+    client_list_ = []
+    for clients in server_client:
+        client_models = [client_list[i] for i in clients]
+        client_list_.extend(aggregate(model_list=client_models))
+    client_list = deepcopy(client_list_)
+    server = deepcopy(client_list[::3])
+
+    for i, model_ in enumerate(server):
+        acc_server[i].append(eval_model(model_, test_loader[i//3]))
 
 save_path = f'./res/fedavg_seed_{seed}_alpha_{alpha}_dataset_{dataset}_model_structure_{model_structure}/'
 file_name = save_path + \

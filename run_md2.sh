@@ -1,17 +1,17 @@
-a=(1.0 0.8 0.6 0.4 0.2 0.0)
-temperature=(0.2 0.4 0.6 0.8 1 2 4 6 8 10)
+a=(0.5)           # (1.0 0.5)
+temperature=(5) # (1 5 10)
 n_client=9
 n_train_data=1000
 n_public_data=100
 n_test_data=200
-seed=0
+seed=10000
 local_epochs=5
 distill_epochs=5
-server_epochs=100
+server_epochs=20
 batch_size=160
-alpha=0.1
-dataset='mnist'
-model_structure='mlp'
+alpha=1
+dataset='cifar10'
+model_structure='resnet18'
 device=0
 
 for a_ in ${a[@]}; do

@@ -1,4 +1,4 @@
-a=(1)           # (1.0 0.5)
+a=(0.5)           # (1.0 0.5)
 temperature=(1) # (1 5 10)
 n_client=9
 n_train_data=1000
@@ -11,7 +11,7 @@ server_epochs=20
 batch_size=160
 alpha=0.1
 dataset='cifar10'
-model_structure='resnet18'
+model_structure='cnn2'
 device=1
 
 for a_ in ${a[@]}; do

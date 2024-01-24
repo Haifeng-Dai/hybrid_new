@@ -1,26 +1,22 @@
 n_client=9
-n_train_data=1100
-n_public_data=0
+n_train_data=2000
 n_test_data=200
-seed=10
-local_epochs=5
-distill_epochs=5
+seed=10000
+local_epochs=20
 batch_size=160
-server_epochs=100
-alpha=0.1
-dataset='cifar100'
-model_structure=('resnet18')
+server_epochs=5
+alpha=1
+dataset='cifar10'
+model_structure=('cnn2')
 device=2
 
 for model_structure_ in ${model_structure[@]}; do
-  python avg_test.py \
+  python test1.py \
     --n_client $n_client \
     --n_train_data $n_train_data \
-    --n_public_data $n_public_data \
     --n_test_data $n_test_data \
     --seed $seed \
     --local_epochs $local_epochs \
-    --distill_epochs $distill_epochs \
     --batch_size $batch_size \
     --server_epochs $server_epochs \
     --alpha $alpha \
