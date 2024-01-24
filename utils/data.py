@@ -221,14 +221,6 @@ def non_iid(
     return data_client
 
 
-def list_same_term(len_list, term=[]):
-    # 返回一个全是空列表的列表
-    list_return = []
-    for _ in range(len_list):
-        list_return.append(deepcopy(term))
-    return list_return
-
-
 def split_non_iid(
         dataset: list | Dataset,
         pro: torch.Tensor,
@@ -262,9 +254,10 @@ def dirichlet_split_noniid(train_labels, n_clients, n_classes, label_distributio
         split_point = np.split(
             k_idcs, (np.cumsum(fracs)[:-1]*len(k_idcs)).astype(int))
         for i, idcs in enumerate(split_point):
-            client_idcs[i] += [idcs]
-    client_idx = [np.concatenate(idcs).tolist() for idcs in client_idcs]
-    return client_idx
+            # client_idcs[i] += [idcs]
+            client_idcs[i] += idcs.tolist()
+    # client_idcs = [np.concatenate(idcs).tolist() for idcs in client_idcs]
+    return client_idcs
 
 
 def dirichlet_split(
@@ -301,3 +294,42 @@ def dirichlet_split(
         test_set[i] = [dataset.test_set[j] for j in test_idx[i]]
 
     return train_set, test_set, n_targets, in_channel
+
+
+def iid_split(dataset, num, n_classes):
+    # print(type(dataset), len(dataset))
+    all_target = []
+    for _, target in dataset:
+        all_target.append(target)
+    # all_target = dataset.targets
+    client_idx = {i: [] for i in range(num)}
+    class_idcs = [np.argwhere(np.array(all_target) == y).flatten()
+                  for y in range(n_classes)]
+    # [print(i, len(idxs)) for i, idxs in enumerate(class_idcs)]
+    for idxs in class_idcs:
+        frac = int((1 / num) * len(idxs))
+        fracs = np.cumsum([frac,] * (num - 1))
+        splited_idx = np.split(idxs, fracs)
+        for client in range(num):
+            client_idx[client] += splited_idx[client].tolist()
+    client_dataset = {i: [] for i in range(num)}
+    for i in range(num):
+        client_dataset[i] = [dataset[j] for j in client_idx[i]]
+    return client_dataset
+
+
+# if __name__ == '__main__':
+    # dataset = GetDataset().test_set
+    # dataset_ = iid_split(dataset, 3, 10)
+    # print(dataset_[0][0])
+    # print(len(dataset_))
+    # [print(len(dataset_[i])) for i in range(3)]
+    # for i in range(3):
+    #     k = 0
+    #     for _, target in dataset_[i]:
+    #         if target == 1:
+    #             k += 1
+    #     print(k)
+    # train_set, test_set, n_targets, in_channel = dirichlet_split(
+    #     dataset_name='cifar10', alpha=1, n_clients=3)
+    # print(train_set[0][0])

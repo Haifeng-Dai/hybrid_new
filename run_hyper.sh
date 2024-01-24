@@ -1,5 +1,6 @@
 a=(0.5)           # (1.0 0.5)
 temperature=(1) # (1 5 10)
+n_server=3
 n_client=9
 n_train_data=1000
 n_public_data=100
@@ -17,9 +18,10 @@ device=1
 for a_ in ${a[@]}; do
   for temperature_ in ${temperature[@]}; do
     # for model_structure_ in ${model_structure[@]}; do
-    python md_test.py \
+    python hyper_fed.py \
       --a $a_ \
       --temperature $temperature_ \
+      --n_server $n_server \
       --n_client $n_client \
       --n_train_data $n_train_data \
       --n_public_data $n_public_data \

@@ -32,9 +32,9 @@ def model_init(
         model_ = CNN3(in_channel=in_channel, n_class=num_target, dim=1600)
     elif model_structure == 'lenet5':
         model_ = LeNet5(in_channel=in_channel, n_class=num_target)
-    model_list = []
-    for i in range(num_client):
-        model_list.append(deepcopy(model_))
+    model_list = [deepcopy(model_) for i in range(num_client)]
+    # for i in range(num_client):
+    #     model_list.append(deepcopy(model_))
     return model_list
 
 
@@ -95,6 +95,8 @@ def get_args():
                         help='weight of kl loss in distilling trainning, default=1.0')
     parser.add_argument('--temperature', type=float or int, default=6.,
                         help='temperature of distillation, default=6')
+    parser.add_argument('--n_server', type=int, default=3,
+                        help='number of servers, default=3')
     parser.add_argument('--n_client', type=int, default=9,
                         help='number of clients, default=9')
     parser.add_argument('--n_train_data', type=int, default=1000,

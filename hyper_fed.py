@@ -3,7 +3,6 @@ import torch
 import torch.nn as nn
 
 from copy import deepcopy
-from torch.distributions.dirichlet import Dirichlet
 from torch.utils.data import DataLoader
 
 import os
@@ -44,8 +43,12 @@ os.environ['CUDA_VISIBLE_DEVICES'] = str(args.device)
 setup_seed(args.seed)
 all_client = range(args.n_client)
 server_client = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
+client_server = [0] * 3 + [1] * 3 + [2] * 3
+# print(client_server)
+# sys.exit()
 
-message = 'fed_avg' + f"\n\
+message = 'hyper_fed' + f"\n\
+    {'n_server':^17}:{args.n_server:^7}\n\
     {'n_client':^17}:{args.n_client:^7}\n\
     {'n_train_data':^17}:{args.n_train_data:^7}\n\
     {'n_test_data':^17}:{args.n_test_data:^7}\n\
@@ -61,9 +64,30 @@ log.info(message)
 
 
 # %% 2. data preparation
-train_set, test_set, n_targets, in_channel = dirichlet_split(dataset_name=args.dataset,
-                                                             alpha=args.alpha,
-                                                             n_clients=args.n_client,)
+server_train_set, server_test_set, n_targets, in_channel = dirichlet_split(dataset_name=args.dataset,
+                                                                           alpha=args.alpha,
+                                                                           n_clients=args.n_server,)
+[print(i, len(j)) for i, j in server_train_set.items()]
+train_set = {}
+for i, data_set in server_train_set.items():
+    splited_set = iid_split(data_set, 3, n_targets)
+    for j, client in enumerate(server_client[i]):
+        train_set[client] = splited_set[j]
+[print(i, len(j)) for i, j in train_set.items()]
+# train_set_ = deepcopy(train_set)
+# train_set_[0] = deepcopy(train_set[3])
+# train_set_[3] = deepcopy(train_set[0])
+# train_set_[1] = deepcopy(train_set[4])
+# train_set_[4] = deepcopy(train_set[1])
+# train_set = deepcopy(train_set_)
+
+# sys.exit()
+test_set = {}
+for i, data_set in server_test_set.items():
+    splited_set = iid_split(data_set, 3, n_targets)
+    for j, client in enumerate(server_client[i]):
+        test_set[client] = splited_set[j]
+[print(len(i)) for i in test_set.values()]
 train_loader = {}
 for i, dataset_ in train_set.items():
     train_loader[i] = DataLoader(dataset=dataset_,
@@ -100,15 +124,16 @@ for server_epoch in range(args.server_epochs):
     msg_local = '[server epoch {}, client {}, local train]'
     msg_test_local = 'local epoch {}, acc: {:.4f}'
     client_list_ = []
-    lr = 1e-3 / (server_epoch + 1)
-    for i, client in enumerate(client_list):
-        log.info(msg_local.format(server_epoch + 1, i + 1))
+    # lr = 1e-3 / (server_epoch + 1)
+    lr = 1e-4
+    for cid, client in enumerate(client_list):
+        # if cid != 4:
+        #     continue
+        log.info(msg_local.format(server_epoch + 1, cid + 1))
         client_ = client.cuda()
-        optimizer = torch.optim.Adam(params=client_.parameters(),
-                                     lr=lr,
-                                     weight_decay=1e-4)
+        optimizer = torch.optim.Adam(params=client_.parameters(), lr=lr)
         for local_epoch in range(args.local_epochs):
-            for data_, target_ in train_loader[i]:
+            for data_, target_ in train_loader[cid]:
                 optimizer.zero_grad()
                 output_ = client_(data_.cuda())
                 loss = CE_Loss(output_, target_.cuda())
@@ -116,9 +141,8 @@ for server_epoch in range(args.server_epochs):
                 optimizer.step()
 
             # test
-            model__ = client_
-            acc[i].append(eval_model(model__, test_loader[i]))
-            log.info(msg_test_local.format(local_epoch + 1, acc[i][-1]))
+            acc[cid].append(eval_model(client_, test_loader[client_server[cid]]))
+            log.info(msg_test_local.format(local_epoch + 1, acc[cid][-1]))
         client_list_.append(deepcopy(client_))
     client_list = deepcopy(client_list_)
 
@@ -129,11 +153,13 @@ for server_epoch in range(args.server_epochs):
     client_list = deepcopy(client_list_)
     server = deepcopy(client_list[::3])
 
-    for i, model_ in enumerate(server):
-        acc_server[i].append(eval_model(model_, test_loader[i//3]))
+    for sid, model_ in enumerate(server):
+        acc_server[sid].append(eval_model(model_, test_loader[client_server[sid]]))
+    break
+sys.exit()
 
 # %% 6. save
-save_path = f'./res/fedavg_seed_{args.seed}_alpha_{args.alpha}_dataset_{args.dataset}_model_structure_{args.model_structure}/'
+save_path = f'./res/hyper_fed_seed_{args.seed}_alpha_{args.alpha}_dataset_{args.dataset}_model_structure_{args.model_structure}/'
 file_name = save_path + \
     f'n_client_{args.n_client}_' + \
     f'n_train_data_{args.n_train_data}_' + \
@@ -141,8 +167,7 @@ file_name = save_path + \
     f'local_epochs_{args.local_epochs}_' + \
     f'server_epochs_{args.server_epochs}_' + \
     f'distill_epochs_{args.distill_epochs}_' + \
-    f'batch_size_{args.batch_size}_' + \
-    f'dataset_{args.dataset}.pt'
+    f'batch_size_{args.batch_size}.pt'
 os.makedirs(save_path, exist_ok=True)
 torch.save(obj={'acc': acc,
                 'acc_server': acc_server,
