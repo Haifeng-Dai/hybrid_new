@@ -1,10 +1,10 @@
-n_client=9
-n_train_data=1000
+n_client=3
+n_train_data=3000
 n_test_data=200
 seed=10000
 local_epochs=20
 batch_size=160
-server_epochs=10
+server_epochs=5
 alpha=1
 dataset='cifar10'
 model_structure=('resnet18')

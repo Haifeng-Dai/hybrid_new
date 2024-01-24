@@ -73,68 +73,43 @@ log.info(message)
 
 
 '''2. data preparation'''
-data_set = GetDataset(dataset_name=dataset,
-                      n_public=0)
-in_channel = data_set.in_channel
-n_targets = data_set.n_targets
-pro = Dirichlet(torch.full(size=(data_set.n_targets,),
-                           fill_value=float(alpha))).sample([n_client])
-msg = '\n' + str(pro) + '\n' + str(pro * n_train_data)
-log.info(msg)
-train_set = split_non_iid(
-    dataset=data_set.train_set,
-    pro=pro,
-    n_data=n_train_data,
-    n_client=n_client,
-)
-test_set = split_non_iid(
-    dataset=data_set.test_set,
-    pro=pro,
-    n_data=n_test_data,
-    n_client=n_client,
-)
-test_loader = {}
-for i, dataset_ in test_set.items():
-    test_loader[i] = DataLoader(dataset=dataset_,
-                                batch_size=10,
-                                pin_memory=True,
-                                num_workers=8)
-if model_structure == 'mlp':
-    client_list = model_init(num_client=n_client,
-                             model_structure='mlp',
-                             num_target=n_targets,
-                             in_channel=in_channel)
-elif model_structure == 'resnet18':
-    client_list = model_init(num_client=n_client,
-                             model_structure='resnet18',
-                             num_target=n_targets,
-                             in_channel=in_channel)
-elif model_structure == 'cnn1':
-    client_list = model_init(num_client=n_client,
-                             model_structure='cnn1',
-                             num_target=n_targets,
-                             in_channel=in_channel)
-elif model_structure == 'cnn2':
-    client_list = model_init(num_client=n_client,
-                             model_structure='cnn2',
-                             num_target=n_targets,
-                             in_channel=in_channel)
-elif model_structure == 'lenet5':
-    client_list = model_init(num_client=n_client,
-                             model_structure='lenet5',
-                             num_target=n_targets,
-                             in_channel=in_channel)
-else:
-    raise ValueError(f'No such model: {model_structure}')
-
-
-# dataloader must be defined after DDP initialization
+# data_set = GetDataset(dataset_name=dataset,
+#                       n_public=0)
+# in_channel = data_set.in_channel
+# n_targets = data_set.n_targets
+# pro = Dirichlet(torch.full(size=(data_set.n_targets,),
+#                            fill_value=float(alpha))).sample([n_client])
+# msg = '\n' + str(pro) + '\n' + str(pro * n_train_data)
+# log.info(msg)
+# train_set = split_non_iid(dataset=data_set.train_set,
+#                           pro=pro,
+#                           n_data=n_train_data,
+#                           n_client=n_client,)
+# test_set = split_non_iid(dataset=data_set.test_set,
+#                          pro=pro,
+#                          n_data=n_test_data,
+#                          n_client=n_client,)
+train_set, test_set, n_targets, in_channel = dirichlet_split(dataset_name=dataset,
+                                                             alpha=alpha,
+                                                             n_clients=n_client,)
 train_loader = {}
 for i, dataset_ in train_set.items():
     train_loader[i] = DataLoader(dataset=dataset_,
                                  batch_size=batch_size,
                                  num_workers=8,
                                  shuffle=True)
+test_loader = {}
+for i, dataset_ in test_set.items():
+    test_loader[i] = DataLoader(dataset=dataset_,
+                                batch_size=10,
+                                pin_memory=True,
+                                num_workers=8)
+
+'''3. model initialization'''
+client_list = model_init(num_client=n_client,
+                         model_structure=model_structure,
+                         num_target=n_targets,
+                         in_channel=in_channel)
 
 
 '''4. DDP: loss function initialization'''

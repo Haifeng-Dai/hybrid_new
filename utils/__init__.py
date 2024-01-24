@@ -27,9 +27,11 @@ def model_init(
     elif model_structure == 'cnn1':
         model_ = CNN1(in_channel=in_channel, n_class=num_target)
     elif model_structure == 'cnn2':
-        model_ = CNN1(in_channel=in_channel, n_class=num_target)
+        model_ = CNN2(in_channel=in_channel, n_class=num_target)
+    elif model_structure == 'cnn3':
+        model_ = CNN3(in_channel=in_channel, n_class=num_target, dim=1600)
     elif model_structure == 'lenet5':
-        model_ = CNN1(in_channel=in_channel, n_class=num_target)
+        model_ = LeNet5(in_channel=in_channel, n_class=num_target)
     model_list = []
     for i in range(num_client):
         model_list.append(deepcopy(model_))
