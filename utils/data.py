@@ -264,11 +264,13 @@ def dirichlet_split(
         dataset_name: str = 'mnist',
         alpha: float or int = 1,
         n_clients: int = 3,
+        n_public: int = 50,
+        avg: bool = False,
 ):
 
-    dataset = GetDataset(dataset_name)
-    n_targets = dataset.n_targets
-    in_channel = dataset.in_channel
+    dataset = GetDataset(dataset_name=dataset_name, n_public=n_public)
+    # n_targets = dataset.n_targets
+    # in_channel = dataset.in_channel
     # train_set = dataset.train_set
     # test_set = dataset.test_set
     # n_classes = dataset.n_targets
@@ -276,24 +278,32 @@ def dirichlet_split(
     label_distribution = np.random.dirichlet(
         [alpha]*n_clients, dataset.n_targets)
 
+    train_targets = [data[1] for data in dataset.train_set]
     train_idx = dirichlet_split_noniid(
-        train_labels=dataset.train_set.targets,
+        train_labels=train_targets,
         n_clients=n_clients,
         n_classes=dataset.n_targets,
         label_distribution=label_distribution
     )
-    test_idx = dirichlet_split_noniid(
-        train_labels=dataset.test_set.targets,
-        n_clients=n_clients,
-        n_classes=dataset.n_targets,
-        label_distribution=label_distribution
-    )
-    train_set, test_set = {}, {}
+    if avg:
+        test_set = dataset.test_set
+    else:
+        test_targets = [data[1] for data in dataset.test_set]
+        test_idx = dirichlet_split_noniid(
+            train_labels=test_targets,
+            n_clients=n_clients,
+            n_classes=dataset.n_targets,
+            label_distribution=label_distribution
+        )
+        test_set = {}
+
+    train_set = {}
     for i in range(n_clients):
         train_set[i] = [dataset.train_set[j] for j in train_idx[i]]
-        test_set[i] = [dataset.test_set[j] for j in test_idx[i]]
+        if not avg:
+            test_set[i] = [dataset.test_set[j] for j in test_idx[i]]
 
-    return train_set, test_set, n_targets, in_channel
+    return train_set, test_set, dataset.n_targets, dataset.in_channel, dataset.public_set
 
 
 def iid_split(dataset, num, n_classes):

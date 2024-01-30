@@ -41,17 +41,13 @@ os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ['CUDA_VISIBLE_DEVICES'] = str(args.device)
 
 setup_seed(args.seed)
-all_client = range(args.n_client)
 server_client = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
 client_server = [0] * 3 + [1] * 3 + [2] * 3
 # print(client_server)
 # sys.exit()
 
 message = 'hyper_fed' + f"\n\
-    {'n_server':^17}:{args.n_server:^7}\n\
-    {'n_client':^17}:{args.n_client:^7}\n\
-    {'n_train_data':^17}:{args.n_train_data:^7}\n\
-    {'n_test_data':^17}:{args.n_test_data:^7}\n\
+    {'n_public_data':^17}:{args.n_public_data:^7}\n\
     {'seed':^17}:{args.seed:^7}\n\
     {'local_epochs':^17}:{args.local_epochs:^7}\n\
     {'distill_epochs':^17}:{args.distill_epochs:^7}\n\
@@ -64,30 +60,19 @@ log.info(message)
 
 
 # %% 2. data preparation
-server_train_set, server_test_set, n_targets, in_channel = dirichlet_split(dataset_name=args.dataset,
-                                                                           alpha=args.alpha,
-                                                                           n_clients=args.n_server,)
-[print(i, len(j)) for i, j in server_train_set.items()]
+server_train_set, server_test_set, n_targets, in_channel, public_data = dirichlet_split(
+    dataset_name=args.dataset,
+    alpha=args.alpha,
+    n_clients=args.n_server,
+    n_public=args.n_public_data
+)
+
 train_set = {}
 for i, data_set in server_train_set.items():
     splited_set = iid_split(data_set, 3, n_targets)
     for j, client in enumerate(server_client[i]):
         train_set[client] = splited_set[j]
-[print(i, len(j)) for i, j in train_set.items()]
-# train_set_ = deepcopy(train_set)
-# train_set_[0] = deepcopy(train_set[3])
-# train_set_[3] = deepcopy(train_set[0])
-# train_set_[1] = deepcopy(train_set[4])
-# train_set_[4] = deepcopy(train_set[1])
-# train_set = deepcopy(train_set_)
 
-# sys.exit()
-test_set = {}
-for i, data_set in server_test_set.items():
-    splited_set = iid_split(data_set, 3, n_targets)
-    for j, client in enumerate(server_client[i]):
-        test_set[client] = splited_set[j]
-[print(len(i)) for i in test_set.values()]
 train_loader = {}
 for i, dataset_ in train_set.items():
     train_loader[i] = DataLoader(dataset=dataset_,
@@ -95,11 +80,15 @@ for i, dataset_ in train_set.items():
                                  num_workers=8,
                                  shuffle=True)
 test_loader = {}
-for i, dataset_ in test_set.items():
+for i, dataset_ in server_test_set.items():
     test_loader[i] = DataLoader(dataset=dataset_,
                                 batch_size=1000,
                                 pin_memory=True,
                                 num_workers=8)
+public_loader = DataLoader(dataset=public_data,
+                           batch_size=args.n_public_data,
+                           pin_memory=True,
+                           num_workers=8)
 
 
 # %% 3. model initialization
@@ -107,6 +96,7 @@ client_list = model_init(num_client=args.n_client,
                          model_structure=args.model_structure,
                          num_target=n_targets,
                          in_channel=in_channel)
+server = deepcopy([client_list[::3]])
 
 
 # %% 4. loss function initialization
@@ -117,8 +107,11 @@ LogSoftmax = nn.LogSoftmax(dim=-1).cuda()
 
 
 # %% 5. model training and distillation
-acc = {i: [] for i in all_client}
-acc_server = deepcopy(acc)
+acc, acc_server = {}, {}
+for i in range(args.n_client):
+    acc[i] = [eval_model(client_list[0], test_loader),]
+for i in range(args.n_server):
+    acc_server[i] = [eval_model(server[0][i], test_loader),]
 for server_epoch in range(args.server_epochs):
     # local train
     msg_local = '[server epoch {}, client {}, local train]'
@@ -141,7 +134,8 @@ for server_epoch in range(args.server_epochs):
                 optimizer.step()
 
             # test
-            acc[cid].append(eval_model(client_, test_loader[client_server[cid]]))
+            acc[cid].append(eval_model(
+                client_, test_loader[client_server[cid]]))
             log.info(msg_test_local.format(local_epoch + 1, acc[cid][-1]))
         client_list_.append(deepcopy(client_))
     client_list = deepcopy(client_list_)
@@ -154,16 +148,60 @@ for server_epoch in range(args.server_epochs):
     server = deepcopy(client_list[::3])
 
     for sid, model_ in enumerate(server):
-        acc_server[sid].append(eval_model(model_, test_loader[client_server[sid]]))
-    break
-sys.exit()
+        acc_server[sid].append(eval_model(
+            model_, test_loader[client_server[sid]]))
+
+    client_list_ = []
+    msg_dist = '[server epoch {}, client {}, distill train]'
+    msg_test_dist = 'distill epoch {}, acc: {:.4f}'
+    for cid, client in enumerate(client_list):
+        log.info(msg_dist.format(server_epoch+1, cid+1))
+        server_ = deepcopy(server)
+        server_.pop(client_server[cid])
+        client_ = client.cuda()
+        optimizer = torch.optim.Adam(params=client_.parameters(), lr=lr)
+        for distill_epoch in range(args.distill_epochs):
+            for data_, target_ in public_loader:
+                data_ = data_.cuda()
+                logits = torch.zeros(size=[data_.shape[0], n_targets]).cuda()
+                for model__ in server_:
+                    logits += model__(data_).detach()
+                logits /= (args.n_server - 1)
+                optimizer.zero_grad()
+                output_ = client_(data_)
+                loss_ce = CE_Loss(output_, target_.cuda())
+                loss_kl = KL_Loss(LogSoftmax(output_/args.temperature),
+                                  Softmax(logits/args.temperature))
+                loss = args.a * loss_kl + (1 - args.a) * loss_ce
+                loss.backward()
+                optimizer.step()
+
+            # test
+            model__ = client_
+            acc[i].append(eval_model(model__, test_loader[i]))
+            log.info(msg_test_dist.format(distill_epoch + 1, acc[i][-1]))
+        client_list_.append(deepcopy(client_))
+    client_list = deepcopy(client_list_)
+
+    client_list_ = []
+    for clients in server_client:
+        client_models = [client_list[i] for i in clients]
+        client_list_.extend(aggregate(model_list=client_models))
+    client_list = deepcopy(client_list_)
+    server = deepcopy(client_list[::3])
+
+    for sid, model_ in enumerate(server):
+        acc_server[sid].append(eval_model(
+            model_, test_loader[client_server[sid]]))
+#     break
+# sys.exit()
 
 # %% 6. save
-save_path = f'./res/hyper_fed_seed_{args.seed}_alpha_{args.alpha}_dataset_{args.dataset}_model_structure_{args.model_structure}/'
+save_path = f'./res/hyper_fed_seed_{args.seed}_' + \
+    f'alpha_{args.alpha}_' + \
+    f'dataset_{args.dataset}_' + \
+    f'model_structure_{args.model_structure}/'
 file_name = save_path + \
-    f'n_client_{args.n_client}_' + \
-    f'n_train_data_{args.n_train_data}_' + \
-    f'n_test_data_{args.n_test_data}_' + \
     f'local_epochs_{args.local_epochs}_' + \
     f'server_epochs_{args.server_epochs}_' + \
     f'distill_epochs_{args.distill_epochs}_' + \
@@ -171,7 +209,7 @@ file_name = save_path + \
 os.makedirs(save_path, exist_ok=True)
 torch.save(obj={'acc': acc,
                 'acc_server': acc_server,
-                'server_model': client_list[0].state_dict()},
+                'server_model': [server_.state_dict() for server_ in server]},
            f=file_name)
 log.info(f'results saved in {file_name}.')
 t_end = time.time()

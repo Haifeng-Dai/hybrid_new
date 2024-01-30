@@ -4,7 +4,7 @@ import torch.nn as nn
 
 from copy import deepcopy
 from torch.distributions.dirichlet import Dirichlet
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, ConcatDataset
 
 import os
 from utils import *
@@ -87,24 +87,17 @@ log.info(message)
 #                          pro=pro,
 #                          n_data=n_test_data,
 #                          n_client=n_client,)
-train_set, test_set, n_targets, in_channel, _ = dirichlet_split(dataset_name=args.dataset,
-                                                                alpha=args.alpha,
-                                                                n_clients=args.n_client,
-                                                                avg=True)
-# print(test_set)
-# sys.exit()
+train_set, test_set, n_targets, in_channel, public_data = dirichlet_split(dataset_name=args.dataset,
+                                                                          alpha=args.alpha,
+                                                                          n_clients=args.n_client,
+                                                                          avg=True)
 train_loader = {}
 for i, dataset_ in train_set.items():
+    dataset_new = ConcatDataset([dataset_, public_data])
     train_loader[i] = DataLoader(dataset=dataset_,
                                  batch_size=args.batch_size,
                                  num_workers=8,
                                  shuffle=True)
-# test_loader = {}
-# for i, dataset_ in test_set.items():
-#     test_loader[i] = DataLoader(dataset=dataset_,
-#                                 batch_size=10,
-#                                 pin_memory=True,
-#                                 num_workers=8)
 test_loader = DataLoader(dataset=test_set,
                          batch_size=10,
                          pin_memory=True,
@@ -160,7 +153,7 @@ for server_epoch in range(args.server_epochs):
         acc_server[i].append(eval_model(client_list[0], test_loader))
         log.info(msg_test_server.format(server_epoch + 1, acc_server[i][-1]))
 
-save_path = f'./res/fedavg_seed_{args.seed}_' + \
+save_path = f'./res/fedavg_pub_seed_{args.seed}_' + \
     f'alpha_{args.alpha}_' + \
     f'dataset_{args.dataset}_' + \
     f'model_structure_{args.model_structure}/'

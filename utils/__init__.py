@@ -23,7 +23,8 @@ def model_init(
     if model_structure == 'mlp':
         model_ = MLP(n_class=num_target)
     elif model_structure == 'resnet18':
-        model_ = torchvision.models.resnet18(weights=None, num_classes=num_target)
+        model_ = torchvision.models.resnet18(
+            weights=None, num_classes=num_target)
     elif model_structure == 'cnn1':
         model_ = CNN1(in_channel=in_channel, n_class=num_target)
     elif model_structure == 'cnn2':
@@ -32,9 +33,7 @@ def model_init(
         model_ = CNN3(in_channel=in_channel, n_class=num_target, dim=1600)
     elif model_structure == 'lenet5':
         model_ = LeNet5(in_channel=in_channel, n_class=num_target)
-    model_list = [deepcopy(model_) for i in range(num_client)]
-    # for i in range(num_client):
-    #     model_list.append(deepcopy(model_))
+    model_list = [deepcopy(model_) for _ in range(num_client)]
     return model_list
 
 
@@ -99,12 +98,12 @@ def get_args():
                         help='number of servers, default=3')
     parser.add_argument('--n_client', type=int, default=9,
                         help='number of clients, default=9')
-    parser.add_argument('--n_train_data', type=int, default=1000,
-                        help='number of client\'s train data, default=1000')
-    parser.add_argument('--n_public_data', type=int, default=100,
+    # parser.add_argument('--n_train_data', type=int, default=1000,
+    #                     help='number of client\'s train data, default=1000')
+    parser.add_argument('--n_public_data', type=int, default=50,
                         help='number of publci data, default=100')
-    parser.add_argument('--n_test_data', type=int, default=200,
-                        help='number of client\'s test data, default=200')
+    # parser.add_argument('--n_test_data', type=int, default=200,
+    #                     help='number of client\'s test data, default=200')
     parser.add_argument('--seed', type=int, default=0,
                         help='random seed, default=0')
     parser.add_argument('--local_epochs', type=int, default=10,
@@ -117,9 +116,9 @@ def get_args():
                         help='epochs of server communication, default=10')
     parser.add_argument('--alpha', type=float or int, default=10.,
                         help='parameter of Dirichlet distribution, default=10.0')
-    parser.add_argument('--dataset', type=str, default='mnist',
+    parser.add_argument('--dataset', choices=['mnist', 'cifar10', 'cifar100'], default='mnist',
                         help='select a dataset from mnist, cifar10 and cifar100, default=mnist.')
-    parser.add_argument('--model_structure', type=str, default='mlp',
+    parser.add_argument('--model_structure', choices=['mlp', 'lenet5', 'cnn1', 'cnn2', 'cnn3', 'resnet18'], default='mlp',
                         help='select a model to train, default=mlp.')
     parser.add_argument('--device', type=int, default=0,
                         help='select the GPU to use, default=0.')
