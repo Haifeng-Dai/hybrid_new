@@ -109,7 +109,7 @@ LogSoftmax = nn.LogSoftmax(dim=-1).cuda()
 # %% 5. model training and distillation
 acc, acc_server = {}, {}
 for i in range(args.n_client):
-    acc[i] = [eval_model(client_list[0], test_loader),]
+    acc[i] = [eval_model(client_list[0], test_loader[i]),]
 for i in range(args.n_server):
     acc_server[i] = [eval_model(server[0][i], test_loader),]
 for server_epoch in range(args.server_epochs):
