@@ -1,4 +1,4 @@
-n_public_data=50
+n_public_data=100
 seed=10000
 local_epochs=10
 batch_size=160

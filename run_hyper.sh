@@ -1,9 +1,9 @@
-a=(0.5)         # (1.0 0.5)
-temperature=(6) # (1 5 10)
-n_public_data=50
+a=(1.0 0.5 0.0)          # (1.0 0.5)
+temperature=(1 5 10 15) # (1 5 10)
+n_public_data=100
 seed=10000
-local_epochs=5
-distill_epochs=5
+local_epochs=10
+distill_epochs=10
 server_epochs=20
 batch_size=160
 alpha=1
