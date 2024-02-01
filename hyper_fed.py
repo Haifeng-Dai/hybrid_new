@@ -1,12 +1,16 @@
 import time
 import torch
 import torch.nn as nn
+import os
 
 from copy import deepcopy
 from torch.utils.data import DataLoader
+from mpi4py import MPI
 
-import os
 from utils import *
+
+comm = MPI.COMM_WORLD
+rank = comm.Get_rank()
 
 t_start = time.time()
 torch.set_printoptions(precision=3,
@@ -24,6 +28,15 @@ log = get_logger(log_path)
 
 # %% 1. basic parameters
 args = get_args()
+args.device = rank
+if rank == 0:
+    args.temperature = 5
+elif rank == 1:
+    args.temperature = 10
+elif rank == 2:
+    args.temperature = 15
+else:
+    raise ValueError('error.')
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ['CUDA_VISIBLE_DEVICES'] = str(args.device)
 setup_seed(args.seed)
@@ -99,13 +112,13 @@ for cid in range(args.n_client):
     acc[cid] = [eval_model(client_list[cid], test_loader[client_server[cid]]),]
 for server_epoch in range(args.server_epochs):
     # local train
-    msg_local = '[server epoch {}, client {}, local train]'
-    msg_test_local = 'local epoch {}, acc: {:.4f}'
+    msg_local = '[rank: {}, server epoch {}, client {}, local train]'
+    msg_test_local = 'rank: {}, local epoch {}, acc: {:.4f}'
     client_list_ = []
     # lr = 1e-3 / (server_epoch + 1)
     lr = 1e-4
     for cid, client in enumerate(client_list):
-        log.info(msg_local.format(server_epoch + 1, cid + 1))
+        log.info(msg_local.format(rank, server_epoch + 1, cid + 1))
         client_ = client.cuda()
         optimizer = torch.optim.Adam(params=client_.parameters(), lr=lr)
         for local_epoch in range(args.local_epochs):
@@ -119,7 +132,7 @@ for server_epoch in range(args.server_epochs):
             # test
             acc[cid].append(eval_model(
                 client_, test_loader[client_server[cid]]))
-            log.info(msg_test_local.format(local_epoch + 1, acc[cid][-1]))
+            log.info(msg_test_local.format(rank, local_epoch + 1, acc[cid][-1]))
         client_list_.append(deepcopy(client_))
     client_list = deepcopy(client_list_)
 
@@ -143,10 +156,10 @@ for server_epoch in range(args.server_epochs):
     #         model_, test_loader[sid]))
 
     client_list_ = []
-    msg_dist = '[server epoch {}, client {}, distill train]'
-    msg_test_dist = 'distill epoch {}, acc: {:.4f}'
+    msg_dist = '[rank: {}, server epoch {}, client {}, distill train]'
+    msg_test_dist = 'rank: {}, distill epoch {}, acc: {:.4f}'
     for cid, client in enumerate(client_list):
-        log.info(msg_dist.format(server_epoch+1, cid+1))
+        log.info(msg_dist.format(rank, server_epoch+1, cid+1))
         server_ = deepcopy(server)
         server_.pop(client_server[cid])
         client_ = client.cuda()
@@ -171,7 +184,7 @@ for server_epoch in range(args.server_epochs):
             model__ = client_
             acc[cid].append(eval_model(
                 model__, test_loader[client_server[cid]]))
-            log.info(msg_test_dist.format(distill_epoch + 1, acc[i][-1]))
+            log.info(msg_test_dist.format(rank, distill_epoch + 1, acc[i][-1]))
         client_list_.append(deepcopy(client_))
     client_list = deepcopy(client_list_)
 
@@ -194,7 +207,7 @@ for server_epoch in range(args.server_epochs):
     #         model_, test_loader[sid]))
 
 for cid, client in enumerate(client_list):
-    log.info(msg_local.format(server_epoch + 1, cid + 1))
+    log.info(msg_local.format(rank, server_epoch + 1, cid + 1))
     client_ = client.cuda()
     optimizer = torch.optim.Adam(params=client_.parameters(), lr=lr)
     for local_epoch in range(10):
@@ -238,3 +251,4 @@ log.info(f'results saved in {file_name}.')
 t_end = time.time()
 time_cost = time.strftime("%H:%M:%S", time.gmtime(t_end - t_start))
 log.info(f'time cost: {time_cost}')
+comm.barrier()

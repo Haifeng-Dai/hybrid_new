@@ -1,11 +1,11 @@
 import time
 import torch
 import torch.nn as nn
+import os
 
 from copy import deepcopy
 from torch.utils.data import DataLoader
 
-import os
 from utils import *
 
 t_start = time.time()
