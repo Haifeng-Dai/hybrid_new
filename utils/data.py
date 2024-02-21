@@ -303,7 +303,10 @@ def dirichlet_split(
         if not avg:
             test_set[i] = [dataset.test_set[j] for j in test_idx[i]]
 
-    return train_set, test_set, dataset.n_targets, dataset.in_channel, dataset.public_set
+    if n_public:
+        return train_set, test_set, dataset.n_targets, dataset.in_channel, dataset.public_set
+    else:
+        return train_set, test_set, dataset.n_targets, dataset.in_channel
 
 
 def iid_split(dataset, num, n_classes):

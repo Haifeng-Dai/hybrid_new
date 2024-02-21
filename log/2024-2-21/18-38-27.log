@@ -1,0 +1,9 @@
+[2024-02-21 18:38:27] [INFO] normal
+        n_client     :   9   
+          seed       : 10000 
+      local_epochs   :  50   
+       batch_size    :  160  
+          alpha      :  1.0  
+         dataset     :cifar10
+     model_structure : cnn3  
+[2024-02-21 18:38:51] [INFO] client 0 training starts.

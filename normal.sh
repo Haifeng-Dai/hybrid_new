@@ -1,11 +1,11 @@
 n_public_data=100
 seed=10000
-local_epochs=1
+local_epochs=100
 batch_size=160
 alpha=1
 dataset='cifar10'
 model_structure=('cnn3')
-device=0
+device=1
 
 for model_structure_ in ${model_structure[@]}; do
   python normal.py \

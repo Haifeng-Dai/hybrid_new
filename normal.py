@@ -27,8 +27,10 @@ args = get_args()
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ['CUDA_VISIBLE_DEVICES'] = str(args.device)
 setup_seed(args.seed)
+server_client = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
+client_server = [0] * 3 + [1] * 3 + [2] * 3
 
-message = 'fed_avg' + f"\n\
+message = 'normal' + f"\n\
     {'n_client':^17}:{args.n_client:^7}\n\
     {'seed':^17}:{args.seed:^7}\n\
     {'local_epochs':^17}:{args.local_epochs:^7}\n\
@@ -40,20 +42,32 @@ log.info(message)
 
 
 # %% 2. data preparation
-train_set, test_set, n_targets, in_channel, _ = dirichlet_split(dataset_name=args.dataset,
-                                                                alpha=args.alpha,
-                                                                n_clients=args.n_client,
-                                                                avg=True)
+server_train_set, server_test_set, n_targets, in_channel, public_data = dirichlet_split(
+    dataset_name=args.dataset,
+    alpha=args.alpha,
+    n_clients=args.n_server,
+    n_public=args.n_public_data,
+    avg=False
+)
+
+train_set = {}
+for i, data_set in server_train_set.items():
+    splited_set = iid_split(data_set, 3, n_targets)
+    for j, client in enumerate(server_client[i]):
+        train_set[client] = splited_set[j]
+
 train_loader = {}
-for cid, dataset_ in train_set.items():
-    train_loader[cid] = DataLoader(dataset=dataset_,
-                                   batch_size=args.batch_size,
-                                   num_workers=8,
-                                   shuffle=True)
-test_loader = DataLoader(dataset=test_set,
-                         batch_size=10,
-                         pin_memory=True,
-                         num_workers=8)
+for i, dataset_ in train_set.items():
+    train_loader[i] = DataLoader(dataset=dataset_,
+                                 batch_size=args.batch_size,
+                                 num_workers=8,
+                                 shuffle=True)
+test_loader = {}
+for i, dataset_ in server_test_set.items():
+    test_loader[i] = DataLoader(dataset=dataset_,
+                                batch_size=1000,
+                                pin_memory=True,
+                                num_workers=8)
 
 # %% 3. model initialization
 client_list = model_init(num_client=args.n_client,
@@ -68,10 +82,9 @@ CE_Loss = nn.CrossEntropyLoss().cuda()
 
 
 # %% 5. model training and distillation
-init_acc = [eval_model(client_list[0], test_loader),]
-acc = {cid: deepcopy(init_acc) for cid in range(args.n_client)}
-acc_server = {sid: deepcopy(init_acc) for sid in range(args.n_server)}
-lr_all = [1e-3, 5e-4, 1e-4, 5e-5, 1e-6]
+acc = {}
+for cid in range(args.n_client):
+    acc[cid] = [eval_model(client_list[cid], test_loader[client_server[cid]]),]
 msg = 'local epoch {}/{}, acc: {:.4f}'
 lr = 1e-4
 for cid, client in enumerate(client_list):
@@ -87,7 +100,8 @@ for cid, client in enumerate(client_list):
             optimizer.step()
 
         # test
-        acc_ = acc[cid].append(eval_model(client_, test_loader))
+        acc_ = eval_model(client_, test_loader[client_server[cid]])
+        acc[cid].append(acc_)
         log.info(msg.format(local_epoch + 1, str(args.local_epochs), acc_))
 
 save_path = f'./res/normal_seed_{args.seed}_' + \
@@ -98,9 +112,7 @@ file_name = save_path + \
     f'local_epochs_{args.local_epochs}_' + \
     f'batch_size_{args.batch_size}.pt'
 os.makedirs(save_path, exist_ok=True)
-torch.save(obj={'acc': acc,
-                'acc_server': acc_server,
-                'server_model': client_list[0].state_dict()},
+torch.save(obj={'acc': acc},
            f=file_name)
 log.info(f'results saved in {file_name}.')
 t_end = time.time()

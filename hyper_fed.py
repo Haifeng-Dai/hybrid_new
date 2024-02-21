@@ -182,7 +182,7 @@ for server_epoch in range(args.server_epochs):
     for sid, clients in enumerate(server_client):
         client_list_ = [client_list[i] for i in clients]
         agg_list = aggregate(client_list_)
-        client_list__.extend(agg_list)
+        client_list__.extend(deepcopy(agg_list))
         server[sid] = deepcopy(agg_list[0])
     client_list = deepcopy(client_list__)
 
