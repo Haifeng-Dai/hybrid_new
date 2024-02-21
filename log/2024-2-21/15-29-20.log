@@ -1,0 +1,19 @@
+[2024-02-21 15:29:20] [INFO] fed_avg
+        n_client     :   9   
+          seed       : 10000 
+      local_epochs   :   1   
+       batch_size    :  160  
+          alpha      :  1.0  
+         dataset     :cifar10
+     model_structure : cnn3  
+[2024-02-21 15:29:50] [INFO] local epoch 1, acc: 0.2063
+[2024-02-21 15:29:59] [INFO] local epoch 1, acc: 0.1490
+[2024-02-21 15:30:08] [INFO] local epoch 1, acc: 0.1945
+[2024-02-21 15:30:16] [INFO] local epoch 1, acc: 0.1797
+[2024-02-21 15:30:25] [INFO] local epoch 1, acc: 0.2711
+[2024-02-21 15:30:33] [INFO] local epoch 1, acc: 0.1501
+[2024-02-21 15:30:41] [INFO] local epoch 1, acc: 0.1988
+[2024-02-21 15:30:50] [INFO] local epoch 1, acc: 0.1509
+[2024-02-21 15:30:59] [INFO] local epoch 1, acc: 0.2078
+[2024-02-21 15:30:59] [INFO] results saved in ./res/normal_seed_10000_alpha_1.0_dataset_cifar10_model_structure_cnn3/local_epochs_1_batch_size_160.pt.
+[2024-02-21 15:30:59] [INFO] time cost: 00:01:38

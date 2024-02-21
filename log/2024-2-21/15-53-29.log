@@ -1,0 +1,9 @@
+[2024-02-21 15:53:29] [INFO] fed_avg
+        n_client     :   9   
+          seed       : 10000 
+      local_epochs   :   1   
+       batch_size    :  160  
+          alpha      :  1.0  
+         dataset     :cifar10
+     model_structure : cnn3  
+[2024-02-21 15:53:52] [INFO] client 0 training starts.

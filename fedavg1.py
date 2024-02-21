@@ -42,20 +42,31 @@ log.info(message)
 
 
 # %% 2. data preparation
-train_set, test_set, n_targets, in_channel, _ = dirichlet_split(dataset_name=args.dataset,
-                                                                alpha=args.alpha,
-                                                                n_clients=args.n_client,
-                                                                avg=True)
+server_train_set, server_test_set, n_targets, in_channel, public_data = dirichlet_split(
+    dataset_name=args.dataset,
+    alpha=args.alpha,
+    n_clients=args.n_server,
+    avg=False
+)
+
+train_set = {}
+for i, data_set in server_train_set.items():
+    splited_set = iid_split(data_set, 3, n_targets)
+    for j, client in enumerate(server_client[i]):
+        train_set[client] = splited_set[j]
+
 train_loader = {}
-for cid, dataset_ in train_set.items():
-    train_loader[cid] = DataLoader(dataset=dataset_,
-                                   batch_size=args.batch_size,
-                                   num_workers=8,
-                                   shuffle=True)
-test_loader = DataLoader(dataset=test_set,
-                         batch_size=10,
-                         pin_memory=True,
-                         num_workers=8)
+for i, dataset_ in train_set.items():
+    train_loader[i] = DataLoader(dataset=dataset_,
+                                 batch_size=args.batch_size,
+                                 num_workers=8,
+                                 shuffle=True)
+test_loader = {}
+for i, dataset_ in server_test_set.items():
+    test_loader[i] = DataLoader(dataset=dataset_,
+                                batch_size=1000,
+                                pin_memory=True,
+                                num_workers=8)
 
 # %% 3. model initialization
 client_list = model_init(num_client=args.n_client,

@@ -262,9 +262,9 @@ def dirichlet_split_noniid(train_labels, n_clients, n_classes, label_distributio
 
 def dirichlet_split(
         dataset_name: str = 'mnist',
-        alpha: float or int = 1,
+        alpha: float | int = 1,
         n_clients: int = 3,
-        n_public: int = 50,
+        n_public: int = 0,
         avg: bool = False,
 ):
 

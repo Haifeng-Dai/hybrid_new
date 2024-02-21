@@ -72,10 +72,10 @@ init_acc = [eval_model(client_list[0], test_loader),]
 acc = {cid: deepcopy(init_acc) for cid in range(args.n_client)}
 acc_server = {sid: deepcopy(init_acc) for sid in range(args.n_server)}
 lr_all = [1e-3, 5e-4, 1e-4, 5e-5, 1e-6]
-msg_test_local = 'local epoch {}, acc: {:.4f}'
-msg_test_server = 'server epoch {}, acc {:.4f}'
+msg = 'local epoch {}/{}, acc: {:.4f}'
 lr = 1e-4
 for cid, client in enumerate(client_list):
+    log.info(f'client {cid} training starts.')
     client_ = client.cuda()
     optimizer = torch.optim.Adam(params=client_.parameters(), lr=lr)
     for local_epoch in range(args.local_epochs):
@@ -87,8 +87,8 @@ for cid, client in enumerate(client_list):
             optimizer.step()
 
         # test
-        acc[cid].append(eval_model(client_, test_loader))
-        log.info(msg_test_local.format(local_epoch + 1, acc[cid][-1]))
+        acc_ = acc[cid].append(eval_model(client_, test_loader))
+        log.info(msg.format(local_epoch + 1, str(args.local_epochs), acc_))
 
 save_path = f'./res/normal_seed_{args.seed}_' + \
     f'alpha_{args.alpha}_' + \
