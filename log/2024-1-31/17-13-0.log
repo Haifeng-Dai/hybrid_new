@@ -1,0 +1,72 @@
+[2024-01-31 17:13:00] [INFO] fed_avg
+        n_client     :   9   
+          seed       : 10000 
+      local_epochs   :   2   
+     distill_epochs  :  10   
+       batch_size    :  160  
+      server_epochs  :   2   
+          alpha      :  1.0  
+         dataset     :cifar10
+     model_structure : cnn3  
+[2024-01-31 17:13:09] [INFO] [server epoch 1, client 1, local train]
+[2024-01-31 17:13:11] [INFO] local epoch 1, acc: 0.2061
+[2024-01-31 17:13:12] [INFO] local epoch 2, acc: 0.2665
+[2024-01-31 17:13:12] [INFO] [server epoch 1, client 2, local train]
+[2024-01-31 17:13:13] [INFO] local epoch 1, acc: 0.1642
+[2024-01-31 17:13:14] [INFO] local epoch 2, acc: 0.2321
+[2024-01-31 17:13:14] [INFO] [server epoch 1, client 3, local train]
+[2024-01-31 17:13:15] [INFO] local epoch 1, acc: 0.1965
+[2024-01-31 17:13:16] [INFO] local epoch 2, acc: 0.2683
+[2024-01-31 17:13:16] [INFO] [server epoch 1, client 4, local train]
+[2024-01-31 17:13:17] [INFO] local epoch 1, acc: 0.1912
+[2024-01-31 17:13:18] [INFO] local epoch 2, acc: 0.2171
+[2024-01-31 17:13:18] [INFO] [server epoch 1, client 5, local train]
+[2024-01-31 17:13:19] [INFO] local epoch 1, acc: 0.2423
+[2024-01-31 17:13:20] [INFO] local epoch 2, acc: 0.3118
+[2024-01-31 17:13:20] [INFO] [server epoch 1, client 6, local train]
+[2024-01-31 17:13:22] [INFO] local epoch 1, acc: 0.1319
+[2024-01-31 17:13:23] [INFO] local epoch 2, acc: 0.1801
+[2024-01-31 17:13:23] [INFO] [server epoch 1, client 7, local train]
+[2024-01-31 17:13:24] [INFO] local epoch 1, acc: 0.1921
+[2024-01-31 17:13:25] [INFO] local epoch 2, acc: 0.2163
+[2024-01-31 17:13:25] [INFO] [server epoch 1, client 8, local train]
+[2024-01-31 17:13:26] [INFO] local epoch 1, acc: 0.1632
+[2024-01-31 17:13:27] [INFO] local epoch 2, acc: 0.1947
+[2024-01-31 17:13:27] [INFO] [server epoch 1, client 9, local train]
+[2024-01-31 17:13:28] [INFO] local epoch 1, acc: 0.1817
+[2024-01-31 17:13:29] [INFO] local epoch 2, acc: 0.2294
+[2024-01-31 17:13:30] [INFO] server epoch 1, acc 0.2416
+[2024-01-31 17:13:30] [INFO] server epoch 1, acc 0.2322
+[2024-01-31 17:13:31] [INFO] server epoch 1, acc 0.1914
+[2024-01-31 17:13:31] [INFO] [server epoch 2, client 1, local train]
+[2024-01-31 17:13:33] [INFO] local epoch 1, acc: 0.2607
+[2024-01-31 17:13:34] [INFO] local epoch 2, acc: 0.2916
+[2024-01-31 17:13:34] [INFO] [server epoch 2, client 2, local train]
+[2024-01-31 17:13:35] [INFO] local epoch 1, acc: 0.2672
+[2024-01-31 17:13:36] [INFO] local epoch 2, acc: 0.2624
+[2024-01-31 17:13:36] [INFO] [server epoch 2, client 3, local train]
+[2024-01-31 17:13:37] [INFO] local epoch 1, acc: 0.3226
+[2024-01-31 17:13:38] [INFO] local epoch 2, acc: 0.3343
+[2024-01-31 17:13:38] [INFO] [server epoch 2, client 4, local train]
+[2024-01-31 17:13:39] [INFO] local epoch 1, acc: 0.2244
+[2024-01-31 17:13:40] [INFO] local epoch 2, acc: 0.2722
+[2024-01-31 17:13:40] [INFO] [server epoch 2, client 5, local train]
+[2024-01-31 17:13:41] [INFO] local epoch 1, acc: 0.3213
+[2024-01-31 17:13:42] [INFO] local epoch 2, acc: 0.3616
+[2024-01-31 17:13:42] [INFO] [server epoch 2, client 6, local train]
+[2024-01-31 17:13:43] [INFO] local epoch 1, acc: 0.2006
+[2024-01-31 17:13:44] [INFO] local epoch 2, acc: 0.2173
+[2024-01-31 17:13:44] [INFO] [server epoch 2, client 7, local train]
+[2024-01-31 17:13:45] [INFO] local epoch 1, acc: 0.2382
+[2024-01-31 17:13:46] [INFO] local epoch 2, acc: 0.2692
+[2024-01-31 17:13:46] [INFO] [server epoch 2, client 8, local train]
+[2024-01-31 17:13:47] [INFO] local epoch 1, acc: 0.1967
+[2024-01-31 17:13:49] [INFO] local epoch 2, acc: 0.2141
+[2024-01-31 17:13:49] [INFO] [server epoch 2, client 9, local train]
+[2024-01-31 17:13:50] [INFO] local epoch 1, acc: 0.2255
+[2024-01-31 17:13:51] [INFO] local epoch 2, acc: 0.2523
+[2024-01-31 17:13:52] [INFO] server epoch 2, acc 0.3591
+[2024-01-31 17:13:53] [INFO] server epoch 2, acc 0.3242
+[2024-01-31 17:13:53] [INFO] server epoch 2, acc 0.2506
+[2024-01-31 17:13:53] [INFO] results saved in ./res/fedavg_seed_10000_alpha_1.0_dataset_cifar10_model_structure_cnn3/local_epochs_2_server_epochs_2_batch_size_160.pt.
+[2024-01-31 17:13:53] [INFO] time cost: 53.27051305770874

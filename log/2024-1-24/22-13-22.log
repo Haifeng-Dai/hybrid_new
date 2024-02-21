@@ -1,0 +1,19 @@
+[2024-01-24 22:13:22] [INFO] hyper_fed
+        n_server     :   3   
+        n_client     :   9   
+      n_train_data   : 1000  
+       n_test_data   :  200  
+          seed       :   0   
+      local_epochs   :   5   
+     distill_epochs  :   5   
+       batch_size    :  160  
+      server_epochs  :  20   
+          alpha      :  0.1  
+         dataset     :cifar10
+     model_structure : cnn2  
+[2024-01-24 22:13:27] [INFO] [server epoch 1, client 5, local train]
+[2024-01-24 22:13:28] [INFO] local epoch 1, acc: 0.0000
+[2024-01-24 22:13:29] [INFO] local epoch 2, acc: 0.0268
+[2024-01-24 22:13:29] [INFO] local epoch 3, acc: 0.0398
+[2024-01-24 22:13:30] [INFO] local epoch 4, acc: 0.0537
+[2024-01-24 22:13:30] [INFO] local epoch 5, acc: 0.0567

@@ -1,0 +1,12 @@
+[2024-01-24 17:40:14] [INFO] fed_avg
+        n_client     :   9   
+      n_train_data   : 1000  
+       n_test_data   :  200  
+          seed       : 10000 
+      local_epochs   :  20   
+     distill_epochs  :  10   
+       batch_size    :  160  
+      server_epochs  :  10   
+          alpha      :  1.0  
+         dataset     :cifar10
+     model_structure :resnet18

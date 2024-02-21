@@ -22,7 +22,7 @@ t = time.localtime()
 log_path = f'./log/{t.tm_year}-{t.tm_mon}-{t.tm_mday}/'
 if not os.path.exists(log_path):
     os.makedirs(log_path)
-log_path += f'{t.tm_hour}-{t.tm_min}-{t.tm_sec}.log'
+log_path += f'{t.tm_hour}-{t.tm_min}-{t.tm_sec}-{rank}.log'
 log = get_logger(log_path)
 
 
@@ -51,6 +51,8 @@ message = 'hyper_fed' + f"\n\
     {'batch_size':^17}:{args.batch_size:^7}\n\
     {'server_epochs':^17}:{args.server_epochs:^7}\n\
     {'alpha':^17}:{args.alpha:^7}\n\
+    {'a':^17}:{args.a:^7}\n\
+    {'temperature':^17}:{args.temperature:^7}\n\
     {'dataset':^17}:{args.dataset:^7}\n\
     {'model_structure':^17}:{args.model_structure:^7}"
 log.info(message)
@@ -95,8 +97,6 @@ client_list = model_init(num_client=args.n_client,
                          num_target=n_targets,
                          in_channel=in_channel)
 server = deepcopy(client_list[::3])
-# print(type(server), type(server[0]))
-# sys.exit()
 
 
 # %% 4. loss function initialization
@@ -132,7 +132,8 @@ for server_epoch in range(args.server_epochs):
             # test
             acc[cid].append(eval_model(
                 client_, test_loader[client_server[cid]]))
-            log.info(msg_test_local.format(rank, local_epoch + 1, acc[cid][-1]))
+            log.info(msg_test_local.format(
+                rank, local_epoch + 1, acc[cid][-1]))
         client_list_.append(deepcopy(client_))
     client_list = deepcopy(client_list_)
 
@@ -143,17 +144,6 @@ for server_epoch in range(args.server_epochs):
         client_list__.extend(agg_list)
         server[sid] = deepcopy(agg_list[0])
     client_list = deepcopy(client_list__)
-
-    # client_list_ = []
-    # for clients in server_client:
-    #     client_models = [client_list[i] for i in clients]
-    #     client_list_.extend(
-    #         aggregate(model_list=client_models[client_server[cid]]))
-    # client_list = deepcopy(client_list_)
-    # server = deepcopy(client_list[::3])
-    # for sid, model_ in enumerate(server):
-    #     acc_server[sid].append(eval_model(
-    #         model_, test_loader[sid]))
 
     client_list_ = []
     msg_dist = '[rank: {}, server epoch {}, client {}, distill train]'
@@ -196,16 +186,6 @@ for server_epoch in range(args.server_epochs):
         server[sid] = deepcopy(agg_list[0])
     client_list = deepcopy(client_list__)
 
-    # client_list_ = []
-    # for clients in server_client:
-    #     client_models = [client_list[i] for i in clients]
-    #     client_list_.extend(aggregate(model_list=client_models))
-    # client_list = deepcopy(client_list_)
-    # server = deepcopy(client_list[::3])
-    # for sid, model_ in enumerate(server):
-    #     acc_server[sid].append(eval_model(
-    #         model_, test_loader[sid]))
-
 for cid, client in enumerate(client_list):
     log.info(msg_local.format(rank, server_epoch + 1, cid + 1))
     client_ = client.cuda()
@@ -221,14 +201,10 @@ for cid, client in enumerate(client_list):
         # test
         acc[cid].append(eval_model(
             client_, test_loader[client_server[cid]]))
-        log.info(msg_test_local.format(local_epoch + 1, acc[cid][-1]))
+        log.info(msg_test_local.format(rank, local_epoch + 1, acc[cid][-1]))
     client_list_.append(deepcopy(client_))
 client_list = deepcopy(client_list_)
 
-# for sid, clients in enumerate(server_client):
-#     client_list_ = [client_list[i] for i in clients]
-#     server[sid] = aggregate(model_list=client_list_)
-#     acc_server[sid].append(eval_model(server[sid], test_loader[sid]))
 
 # %% 6. save
 save_path = f'./res/hyper_fed_seed_{args.seed}_' + \

@@ -33,7 +33,6 @@ message = 'fed_avg' + f"\n\
     {'n_client':^17}:{args.n_client:^7}\n\
     {'seed':^17}:{args.seed:^7}\n\
     {'local_epochs':^17}:{args.local_epochs:^7}\n\
-    {'distill_epochs':^17}:{args.distill_epochs:^7}\n\
     {'batch_size':^17}:{args.batch_size:^7}\n\
     {'server_epochs':^17}:{args.server_epochs:^7}\n\
     {'alpha':^17}:{args.alpha:^7}\n\

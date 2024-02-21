@@ -1,0 +1,67 @@
+[2024-01-24 22:07:00] [INFO] hyper_fed
+        n_server     :   3   
+        n_client     :   9   
+      n_train_data   : 1000  
+       n_test_data   :  200  
+          seed       : 10000 
+      local_epochs   :   5   
+     distill_epochs  :   5   
+       batch_size    :  160  
+      server_epochs  :  20   
+          alpha      :  0.1  
+         dataset     :cifar10
+     model_structure : cnn2  
+[2024-01-24 22:07:05] [INFO] [server epoch 1, client 1, local train]
+[2024-01-24 22:07:06] [INFO] local epoch 1, acc: 0.6182
+[2024-01-24 22:07:06] [INFO] local epoch 2, acc: 0.6868
+[2024-01-24 22:07:07] [INFO] local epoch 3, acc: 0.6931
+[2024-01-24 22:07:07] [INFO] local epoch 4, acc: 0.7103
+[2024-01-24 22:07:08] [INFO] local epoch 5, acc: 0.7265
+[2024-01-24 22:07:08] [INFO] [server epoch 1, client 2, local train]
+[2024-01-24 22:07:08] [INFO] local epoch 1, acc: 0.6209
+[2024-01-24 22:07:09] [INFO] local epoch 2, acc: 0.6751
+[2024-01-24 22:07:09] [INFO] local epoch 3, acc: 0.6986
+[2024-01-24 22:07:10] [INFO] local epoch 4, acc: 0.7013
+[2024-01-24 22:07:11] [INFO] local epoch 5, acc: 0.7220
+[2024-01-24 22:07:11] [INFO] [server epoch 1, client 3, local train]
+[2024-01-24 22:07:11] [INFO] local epoch 1, acc: 0.6525
+[2024-01-24 22:07:12] [INFO] local epoch 2, acc: 0.6895
+[2024-01-24 22:07:12] [INFO] local epoch 3, acc: 0.6760
+[2024-01-24 22:07:13] [INFO] local epoch 4, acc: 0.6904
+[2024-01-24 22:07:13] [INFO] local epoch 5, acc: 0.7292
+[2024-01-24 22:07:13] [INFO] [server epoch 1, client 4, local train]
+[2024-01-24 22:07:14] [INFO] local epoch 1, acc: 0.0505
+[2024-01-24 22:07:14] [INFO] local epoch 2, acc: 0.0650
+[2024-01-24 22:07:15] [INFO] local epoch 3, acc: 0.0821
+[2024-01-24 22:07:16] [INFO] local epoch 4, acc: 0.0812
+[2024-01-24 22:07:16] [INFO] local epoch 5, acc: 0.0821
+[2024-01-24 22:07:16] [INFO] [server epoch 1, client 5, local train]
+[2024-01-24 22:07:17] [INFO] local epoch 1, acc: 0.0505
+[2024-01-24 22:07:17] [INFO] local epoch 2, acc: 0.0596
+[2024-01-24 22:07:18] [INFO] local epoch 3, acc: 0.0758
+[2024-01-24 22:07:18] [INFO] local epoch 4, acc: 0.0587
+[2024-01-24 22:07:19] [INFO] local epoch 5, acc: 0.0614
+[2024-01-24 22:07:19] [INFO] [server epoch 1, client 6, local train]
+[2024-01-24 22:07:19] [INFO] local epoch 1, acc: 0.0352
+[2024-01-24 22:07:20] [INFO] local epoch 2, acc: 0.0325
+[2024-01-24 22:07:21] [INFO] local epoch 3, acc: 0.0749
+[2024-01-24 22:07:21] [INFO] local epoch 4, acc: 0.0542
+[2024-01-24 22:07:22] [INFO] local epoch 5, acc: 0.0632
+[2024-01-24 22:07:22] [INFO] [server epoch 1, client 7, local train]
+[2024-01-24 22:07:22] [INFO] local epoch 1, acc: 0.0716
+[2024-01-24 22:07:23] [INFO] local epoch 2, acc: 0.0868
+[2024-01-24 22:07:23] [INFO] local epoch 3, acc: 0.0796
+[2024-01-24 22:07:24] [INFO] local epoch 4, acc: 0.0984
+[2024-01-24 22:07:24] [INFO] local epoch 5, acc: 0.1216
+[2024-01-24 22:07:24] [INFO] [server epoch 1, client 8, local train]
+[2024-01-24 22:07:25] [INFO] local epoch 1, acc: 0.0662
+[2024-01-24 22:07:25] [INFO] local epoch 2, acc: 0.1038
+[2024-01-24 22:07:26] [INFO] local epoch 3, acc: 0.0957
+[2024-01-24 22:07:26] [INFO] local epoch 4, acc: 0.0850
+[2024-01-24 22:07:27] [INFO] local epoch 5, acc: 0.1691
+[2024-01-24 22:07:27] [INFO] [server epoch 1, client 9, local train]
+[2024-01-24 22:07:27] [INFO] local epoch 1, acc: 0.0644
+[2024-01-24 22:07:28] [INFO] local epoch 2, acc: 0.1163
+[2024-01-24 22:07:29] [INFO] local epoch 3, acc: 0.0823
+[2024-01-24 22:07:29] [INFO] local epoch 4, acc: 0.0850
+[2024-01-24 22:07:30] [INFO] local epoch 5, acc: 0.1208

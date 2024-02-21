@@ -1,0 +1,22 @@
+[2024-01-30 16:01:28] [INFO] fed_avg
+        n_client     :   9   
+      n_train_data   : 1000  
+       n_test_data   :  200  
+          seed       :   0   
+      local_epochs   :  10   
+     distill_epochs  :  10   
+       batch_size    :  160  
+      server_epochs  :  10   
+          alpha      : 10.0  
+         dataset     : mnist 
+     model_structure :  mlp  
+[2024-01-30 16:01:35] [INFO] [server epoch 1, client 1, local train]
+[2024-01-30 16:01:36] [INFO] local epoch 1, acc: 0.6023
+[2024-01-30 16:01:36] [INFO] local epoch 2, acc: 0.7608
+[2024-01-30 16:01:36] [INFO] local epoch 3, acc: 0.8156
+[2024-01-30 16:01:36] [INFO] local epoch 4, acc: 0.8348
+[2024-01-30 16:01:37] [INFO] local epoch 5, acc: 0.8607
+[2024-01-30 16:01:37] [INFO] local epoch 6, acc: 0.8722
+[2024-01-30 16:01:37] [INFO] local epoch 7, acc: 0.8742
+[2024-01-30 16:01:38] [INFO] local epoch 8, acc: 0.8790
+[2024-01-30 16:01:38] [INFO] local epoch 9, acc: 0.8915

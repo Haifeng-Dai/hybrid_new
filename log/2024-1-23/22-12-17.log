@@ -1,0 +1,15 @@
+[2024-01-23 22:12:17] [INFO] fedmd
+            a        :  0.5  
+            T        :  1.0  
+        n_client     :   9   
+      n_train_data   : 1000  
+      n_public_data  :  100  
+       n_test_data   :  200  
+          seed       : 10000 
+      local_epochs   :   5   
+     distill_epochs  :   5   
+      server_epochs  :  20   
+       batch_size    :  160  
+          alpha      :  1.0  
+         dataset     :cifar10
+     model_structure : cnn2  

@@ -1,0 +1,12 @@
+[2024-01-31 17:12:35] [INFO] fed_avg
+        n_client     :   9   
+          seed       : 10000 
+      local_epochs   :  10   
+     distill_epochs  :  10   
+       batch_size    :  160  
+      server_epochs  :  20   
+          alpha      :  1.0  
+         dataset     :cifar10
+     model_structure : cnn3  
+[2024-01-31 17:12:44] [INFO] [server epoch 1, client 1, local train]
+[2024-01-31 17:12:45] [INFO] local epoch 1, acc: 0.2063

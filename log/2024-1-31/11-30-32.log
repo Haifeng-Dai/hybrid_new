@@ -1,0 +1,10 @@
+[2024-01-31 11:30:32] [INFO] hyper_fed
+      n_public_data  :  50   
+          seed       : 10000 
+      local_epochs   :   5   
+     distill_epochs  :   5   
+       batch_size    :  160  
+      server_epochs  :  20   
+          alpha      :  1.0  
+         dataset     :cifar10
+     model_structure : cnn3  

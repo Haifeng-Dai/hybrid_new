@@ -1,0 +1,38 @@
+[2024-01-31 17:35:41] [INFO] hyper_fed
+      n_public_data  :  100  
+          seed       : 10000 
+      local_epochs   :   2   
+     distill_epochs  :   2   
+       batch_size    :  160  
+      server_epochs  :   2   
+          alpha      :  1.0  
+         dataset     :cifar10
+     model_structure : cnn3  
+[2024-01-31 17:35:52] [INFO] [server epoch 1, client 1, local train]
+[2024-01-31 17:35:53] [INFO] local epoch 1, acc: 0.4026
+[2024-01-31 17:35:54] [INFO] local epoch 2, acc: 0.4492
+[2024-01-31 17:35:54] [INFO] [server epoch 1, client 2, local train]
+[2024-01-31 17:35:54] [INFO] local epoch 1, acc: 0.4034
+[2024-01-31 17:35:55] [INFO] local epoch 2, acc: 0.4593
+[2024-01-31 17:35:55] [INFO] [server epoch 1, client 3, local train]
+[2024-01-31 17:35:55] [INFO] local epoch 1, acc: 0.4022
+[2024-01-31 17:35:56] [INFO] local epoch 2, acc: 0.4439
+[2024-01-31 17:35:56] [INFO] [server epoch 1, client 4, local train]
+[2024-01-31 17:35:57] [INFO] local epoch 1, acc: 0.3719
+[2024-01-31 17:35:57] [INFO] local epoch 2, acc: 0.4504
+[2024-01-31 17:35:57] [INFO] [server epoch 1, client 5, local train]
+[2024-01-31 17:35:58] [INFO] local epoch 1, acc: 0.3518
+[2024-01-31 17:35:58] [INFO] local epoch 2, acc: 0.4478
+[2024-01-31 17:35:58] [INFO] [server epoch 1, client 6, local train]
+[2024-01-31 17:35:59] [INFO] local epoch 1, acc: 0.3648
+[2024-01-31 17:35:59] [INFO] local epoch 2, acc: 0.4483
+[2024-01-31 17:35:59] [INFO] [server epoch 1, client 7, local train]
+[2024-01-31 17:36:00] [INFO] local epoch 1, acc: 0.3806
+[2024-01-31 17:36:00] [INFO] local epoch 2, acc: 0.4117
+[2024-01-31 17:36:00] [INFO] [server epoch 1, client 8, local train]
+[2024-01-31 17:36:01] [INFO] local epoch 1, acc: 0.3825
+[2024-01-31 17:36:02] [INFO] local epoch 2, acc: 0.4166
+[2024-01-31 17:36:02] [INFO] [server epoch 1, client 9, local train]
+[2024-01-31 17:36:02] [INFO] local epoch 1, acc: 0.3639
+[2024-01-31 17:36:03] [INFO] local epoch 2, acc: 0.4115
+[2024-01-31 17:36:03] [INFO] [server epoch 1, client 1, distill train]
