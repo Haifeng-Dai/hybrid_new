@@ -1,0 +1,9 @@
+[2024-02-21 22:34:42] [INFO] fed_avg1
+        n_client     :   9   
+          seed       : 10000 
+      local_epochs   :   1   
+       batch_size    :  160  
+      server_epochs  :   2   
+          alpha      :  1.0  
+         dataset     :cifar10
+     model_structure : cnn3  

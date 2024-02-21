@@ -1,0 +1,27 @@
+[2024-02-21 22:42:03] [INFO] fed_avg1
+        n_client     :   9   
+          seed       : 10000 
+      local_epochs   :   1   
+       batch_size    :  160  
+      server_epochs  :   2   
+          alpha      :  1.0  
+         dataset     :cifar10
+     model_structure : cnn3  
+[2024-02-21 22:42:26] [INFO] [server epoch 1, client 1, local train]
+[2024-02-21 22:42:28] [INFO] local epoch 1, acc: 0.4087
+[2024-02-21 22:42:28] [INFO] [server epoch 1, client 2, local train]
+[2024-02-21 22:42:29] [INFO] local epoch 1, acc: 0.4030
+[2024-02-21 22:42:29] [INFO] [server epoch 1, client 3, local train]
+[2024-02-21 22:42:30] [INFO] local epoch 1, acc: 0.3775
+[2024-02-21 22:42:30] [INFO] [server epoch 1, client 4, local train]
+[2024-02-21 22:42:32] [INFO] local epoch 1, acc: 0.3773
+[2024-02-21 22:42:32] [INFO] [server epoch 1, client 5, local train]
+[2024-02-21 22:42:34] [INFO] local epoch 1, acc: 0.3606
+[2024-02-21 22:42:34] [INFO] [server epoch 1, client 6, local train]
+[2024-02-21 22:42:35] [INFO] local epoch 1, acc: 0.3390
+[2024-02-21 22:42:35] [INFO] [server epoch 1, client 7, local train]
+[2024-02-21 22:42:37] [INFO] local epoch 1, acc: 0.3852
+[2024-02-21 22:42:37] [INFO] [server epoch 1, client 8, local train]
+[2024-02-21 22:42:38] [INFO] local epoch 1, acc: 0.3706
+[2024-02-21 22:42:38] [INFO] [server epoch 1, client 9, local train]
+[2024-02-21 22:42:39] [INFO] local epoch 1, acc: 0.3696

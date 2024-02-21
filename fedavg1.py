@@ -124,9 +124,10 @@ for server_epoch in range(args.server_epochs):
     for sid, clients in enumerate(server_client):
         client_list_ = [client_list[cid] for cid in clients]
         agg_list = aggregate(client_list_)
+        print(clients, sid, len(agg_list), len(client_list_))
         client_list__.extend(deepcopy(agg_list))
-        server[sid] = deepcopy(agg_list[0])
-        acc_ = eval_model(server[sid], test_loader[sid])
+        server_list[sid] = deepcopy(agg_list[0])
+        acc_ = eval_model(server_list[sid], test_loader[sid])
         acc_server[sid].append(acc_)
         log.info(msg_test_server.format(server_epoch + 1, acc_))
     client_list = deepcopy(client_list__)
