@@ -92,7 +92,7 @@ for cid, client in enumerate(client_list):
 acc_server = {}
 for sid, server in enumerate(server_list):
     acc_server[sid] = [eval_model(server, test_loader[sid]),]
-lr_all = [1e-3, 5e-4, 1e-4, 5e-5, 1e-6]
+# lr_all = [1e-3, 5e-4, 1e-4, 5e-5, 1e-6]
 msg_local = '[server epoch {}, client {}, local train]'
 msg_test_local = 'local epoch {}, acc: {:.4f}'
 msg_test_server = 'server epoch {}, acc {:.4f}'
@@ -124,7 +124,7 @@ for server_epoch in range(args.server_epochs):
     for sid, clients in enumerate(server_client):
         client_list_ = [client_list[cid] for cid in clients]
         agg_list = aggregate(client_list_)
-        print(clients, sid, len(agg_list), len(client_list_))
+        # print(clients, sid, len(agg_list), len(client_list_))
         client_list__.extend(deepcopy(agg_list))
         server_list[sid] = deepcopy(agg_list[0])
         acc_ = eval_model(server_list[sid], test_loader[sid])

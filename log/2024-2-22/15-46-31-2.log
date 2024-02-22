@@ -1,0 +1,62 @@
+[2024-02-22 15:46:31] [INFO] hyper_fed1
+      n_public_data  :  100  
+          seed       : 10000 
+      local_epochs   :   1   
+     distill_epochs  :   1   
+       batch_size    :  160  
+      server_epochs  :   2   
+          alpha      :  1.0  
+            a        :  1.0  
+       temperature   :  15   
+         dataset     :cifar10
+     model_structure : cnn3  
+[2024-02-22 15:46:55] [INFO] [rank: 2, server epoch 1, client 1, local train]
+[2024-02-22 15:46:57] [INFO] rank: 2, local epoch 1, acc: 0.4087
+[2024-02-22 15:46:57] [INFO] [rank: 2, server epoch 1, client 2, local train]
+[2024-02-22 15:46:59] [INFO] rank: 2, local epoch 1, acc: 0.4030
+[2024-02-22 15:46:59] [INFO] [rank: 2, server epoch 1, client 3, local train]
+[2024-02-22 15:47:00] [INFO] rank: 2, local epoch 1, acc: 0.3775
+[2024-02-22 15:47:00] [INFO] [rank: 2, server epoch 1, client 4, local train]
+[2024-02-22 15:47:02] [INFO] rank: 2, local epoch 1, acc: 0.3773
+[2024-02-22 15:47:02] [INFO] [rank: 2, server epoch 1, client 5, local train]
+[2024-02-22 15:47:04] [INFO] rank: 2, local epoch 1, acc: 0.3620
+[2024-02-22 15:47:04] [INFO] [rank: 2, server epoch 1, client 6, local train]
+[2024-02-22 15:47:05] [INFO] rank: 2, local epoch 1, acc: 0.3392
+[2024-02-22 15:47:05] [INFO] [rank: 2, server epoch 1, client 7, local train]
+[2024-02-22 15:47:07] [INFO] rank: 2, local epoch 1, acc: 0.3863
+[2024-02-22 15:47:07] [INFO] [rank: 2, server epoch 1, client 8, local train]
+[2024-02-22 15:47:09] [INFO] rank: 2, local epoch 1, acc: 0.3709
+[2024-02-22 15:47:09] [INFO] [rank: 2, server epoch 1, client 9, local train]
+[2024-02-22 15:47:10] [INFO] rank: 2, local epoch 1, acc: 0.3690
+[2024-02-22 15:47:12] [INFO] [rank: 2, server epoch 1, distill train]
+[2024-02-22 15:47:13] [INFO] rank: 2, distill epoch 1, acc: 0.3925
+[2024-02-22 15:47:13] [INFO] [rank: 2, server epoch 1, distill train]
+[2024-02-22 15:47:15] [INFO] rank: 2, distill epoch 1, acc: 0.3669
+[2024-02-22 15:47:15] [INFO] [rank: 2, server epoch 1, distill train]
+[2024-02-22 15:47:16] [INFO] rank: 2, distill epoch 1, acc: 0.3769
+[2024-02-22 15:47:16] [INFO] [rank: 2, server epoch 2, client 1, local train]
+[2024-02-22 15:47:17] [INFO] rank: 2, local epoch 1, acc: 0.4524
+[2024-02-22 15:47:17] [INFO] [rank: 2, server epoch 2, client 2, local train]
+[2024-02-22 15:47:19] [INFO] rank: 2, local epoch 1, acc: 0.4593
+[2024-02-22 15:47:19] [INFO] [rank: 2, server epoch 2, client 3, local train]
+[2024-02-22 15:47:20] [INFO] rank: 2, local epoch 1, acc: 0.4439
+[2024-02-22 15:47:20] [INFO] [rank: 2, server epoch 2, client 4, local train]
+[2024-02-22 15:47:22] [INFO] rank: 2, local epoch 1, acc: 0.4397
+[2024-02-22 15:47:22] [INFO] [rank: 2, server epoch 2, client 5, local train]
+[2024-02-22 15:47:24] [INFO] rank: 2, local epoch 1, acc: 0.4405
+[2024-02-22 15:47:24] [INFO] [rank: 2, server epoch 2, client 6, local train]
+[2024-02-22 15:47:25] [INFO] rank: 2, local epoch 1, acc: 0.4520
+[2024-02-22 15:47:25] [INFO] [rank: 2, server epoch 2, client 7, local train]
+[2024-02-22 15:47:27] [INFO] rank: 2, local epoch 1, acc: 0.4039
+[2024-02-22 15:47:27] [INFO] [rank: 2, server epoch 2, client 8, local train]
+[2024-02-22 15:47:28] [INFO] rank: 2, local epoch 1, acc: 0.4012
+[2024-02-22 15:47:28] [INFO] [rank: 2, server epoch 2, client 9, local train]
+[2024-02-22 15:47:30] [INFO] rank: 2, local epoch 1, acc: 0.4052
+[2024-02-22 15:47:32] [INFO] [rank: 2, server epoch 2, distill train]
+[2024-02-22 15:47:33] [INFO] rank: 2, distill epoch 1, acc: 0.4557
+[2024-02-22 15:47:33] [INFO] [rank: 2, server epoch 2, distill train]
+[2024-02-22 15:47:34] [INFO] rank: 2, distill epoch 1, acc: 0.4465
+[2024-02-22 15:47:34] [INFO] [rank: 2, server epoch 2, distill train]
+[2024-02-22 15:47:35] [INFO] rank: 2, distill epoch 1, acc: 0.4150
+[2024-02-22 15:47:35] [INFO] results saved in ./res/hyper_fed1_seed_10000_alpha_1.0_dataset_cifar10_model_structure_cnn3/a_1.0_T_15_local_epochs_1_server_epochs_2_distill_epochs_1_batch_size_160.pt.
+[2024-02-22 15:47:35] [INFO] time cost: 00:01:04

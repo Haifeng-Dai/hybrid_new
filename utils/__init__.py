@@ -92,7 +92,7 @@ def get_args():
     parser = argparse.ArgumentParser(description='test')
     parser.add_argument('--a', type=float or int, default=1.,
                         help='weight of kl loss in distilling trainning, default=1.0')
-    parser.add_argument('--temperature', type=float or int, default=6.,
+    parser.add_argument('--temperature', type=float or int, default=6., nargs='+',
                         help='temperature of distillation, default=6')
     parser.add_argument('--n_server', type=int, default=3,
                         help='number of servers, default=3')

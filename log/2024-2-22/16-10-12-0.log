@@ -1,0 +1,62 @@
+[2024-02-22 16:10:12] [INFO] hyper_fed1
+      n_public_data  :  100  
+          seed       : 10000 
+      local_epochs   :   1   
+     distill_epochs  :   1   
+       batch_size    :  160  
+      server_epochs  :   2   
+          alpha      :  1.0  
+            a        :  1.0  
+       temperature   :  5.0  
+         dataset     :cifar10
+     model_structure : cnn3  
+[2024-02-22 16:10:24] [INFO] [rank: 0, server epoch 1, client 1, local train]
+[2024-02-22 16:10:25] [INFO] rank: 0, local epoch 1, acc: 0.4087
+[2024-02-22 16:10:25] [INFO] [rank: 0, server epoch 1, client 2, local train]
+[2024-02-22 16:10:25] [INFO] rank: 0, local epoch 1, acc: 0.4030
+[2024-02-22 16:10:25] [INFO] [rank: 0, server epoch 1, client 3, local train]
+[2024-02-22 16:10:26] [INFO] rank: 0, local epoch 1, acc: 0.3775
+[2024-02-22 16:10:26] [INFO] [rank: 0, server epoch 1, client 4, local train]
+[2024-02-22 16:10:26] [INFO] rank: 0, local epoch 1, acc: 0.3773
+[2024-02-22 16:10:26] [INFO] [rank: 0, server epoch 1, client 5, local train]
+[2024-02-22 16:10:27] [INFO] rank: 0, local epoch 1, acc: 0.3620
+[2024-02-22 16:10:27] [INFO] [rank: 0, server epoch 1, client 6, local train]
+[2024-02-22 16:10:27] [INFO] rank: 0, local epoch 1, acc: 0.3395
+[2024-02-22 16:10:27] [INFO] [rank: 0, server epoch 1, client 7, local train]
+[2024-02-22 16:10:28] [INFO] rank: 0, local epoch 1, acc: 0.3861
+[2024-02-22 16:10:28] [INFO] [rank: 0, server epoch 1, client 8, local train]
+[2024-02-22 16:10:28] [INFO] rank: 0, local epoch 1, acc: 0.3712
+[2024-02-22 16:10:28] [INFO] [rank: 0, server epoch 1, client 9, local train]
+[2024-02-22 16:10:29] [INFO] rank: 0, local epoch 1, acc: 0.3698
+[2024-02-22 16:10:29] [INFO] [rank: 0, server epoch 1, distill train]
+[2024-02-22 16:10:30] [INFO] rank: 0, distill epoch 1, acc: 0.3933
+[2024-02-22 16:10:30] [INFO] [rank: 0, server epoch 1, distill train]
+[2024-02-22 16:10:30] [INFO] rank: 0, distill epoch 1, acc: 0.3672
+[2024-02-22 16:10:30] [INFO] [rank: 0, server epoch 1, distill train]
+[2024-02-22 16:10:31] [INFO] rank: 0, distill epoch 1, acc: 0.3774
+[2024-02-22 16:10:31] [INFO] [rank: 0, server epoch 2, client 1, local train]
+[2024-02-22 16:10:31] [INFO] rank: 0, local epoch 1, acc: 0.4524
+[2024-02-22 16:10:31] [INFO] [rank: 0, server epoch 2, client 2, local train]
+[2024-02-22 16:10:32] [INFO] rank: 0, local epoch 1, acc: 0.4597
+[2024-02-22 16:10:32] [INFO] [rank: 0, server epoch 2, client 3, local train]
+[2024-02-22 16:10:32] [INFO] rank: 0, local epoch 1, acc: 0.4435
+[2024-02-22 16:10:32] [INFO] [rank: 0, server epoch 2, client 4, local train]
+[2024-02-22 16:10:33] [INFO] rank: 0, local epoch 1, acc: 0.4402
+[2024-02-22 16:10:33] [INFO] [rank: 0, server epoch 2, client 5, local train]
+[2024-02-22 16:10:33] [INFO] rank: 0, local epoch 1, acc: 0.4421
+[2024-02-22 16:10:33] [INFO] [rank: 0, server epoch 2, client 6, local train]
+[2024-02-22 16:10:34] [INFO] rank: 0, local epoch 1, acc: 0.4512
+[2024-02-22 16:10:34] [INFO] [rank: 0, server epoch 2, client 7, local train]
+[2024-02-22 16:10:34] [INFO] rank: 0, local epoch 1, acc: 0.4050
+[2024-02-22 16:10:34] [INFO] [rank: 0, server epoch 2, client 8, local train]
+[2024-02-22 16:10:35] [INFO] rank: 0, local epoch 1, acc: 0.4001
+[2024-02-22 16:10:35] [INFO] [rank: 0, server epoch 2, client 9, local train]
+[2024-02-22 16:10:35] [INFO] rank: 0, local epoch 1, acc: 0.4052
+[2024-02-22 16:10:36] [INFO] [rank: 0, server epoch 2, distill train]
+[2024-02-22 16:10:36] [INFO] rank: 0, distill epoch 1, acc: 0.4561
+[2024-02-22 16:10:36] [INFO] [rank: 0, server epoch 2, distill train]
+[2024-02-22 16:10:37] [INFO] rank: 0, distill epoch 1, acc: 0.4486
+[2024-02-22 16:10:37] [INFO] [rank: 0, server epoch 2, distill train]
+[2024-02-22 16:10:37] [INFO] rank: 0, distill epoch 1, acc: 0.4152
+[2024-02-22 16:10:37] [INFO] results saved in ./res/hyper_fed1_seed_10000_alpha_1.0_dataset_cifar10_model_structure_cnn3/a_1.0_T_[5.0, 10.0, 15.0]_local_epochs_1_server_epochs_2_distill_epochs_1_batch_size_160.pt.
+[2024-02-22 16:10:37] [INFO] time cost: 00:00:24
