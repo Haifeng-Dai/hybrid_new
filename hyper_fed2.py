@@ -5,8 +5,12 @@ import os
 
 from copy import deepcopy
 from torch.utils.data import DataLoader
+from mpi4py import MPI
 
 from utils import *
+
+comm = MPI.COMM_WORLD
+rank = comm.Get_rank()
 
 t_start = time.time()
 torch.set_printoptions(precision=3,
@@ -18,25 +22,30 @@ t = time.localtime()
 log_path = f'./log/{t.tm_year}-{t.tm_mon}-{t.tm_mday}/'
 if not os.path.exists(log_path):
     os.makedirs(log_path)
-log_path += f'{t.tm_hour}-{t.tm_min}-{t.tm_sec}.log'
+log_path += f'{t.tm_hour}-{t.tm_min}-{t.tm_sec}-{rank}.log'
 log = get_logger(log_path)
 
 
 # %% 1. basic parameters
 args = get_args()
+args.device = rank
+temperature = int(args.temperature[rank])
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ['CUDA_VISIBLE_DEVICES'] = str(args.device)
 setup_seed(args.seed)
 server_client = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
 client_server = [0] * 3 + [1] * 3 + [2] * 3
 
-message = 'normal' + f"\n\
-    {'n_client':^17}:{args.n_client:^7}\n\
+message = 'hyper_fed1' + f"\n\
+    {'n_public_data':^17}:{args.n_public_data:^7}\n\
     {'seed':^17}:{args.seed:^7}\n\
     {'local_epochs':^17}:{args.local_epochs:^7}\n\
+    {'distill_epochs':^17}:{args.distill_epochs:^7}\n\
     {'batch_size':^17}:{args.batch_size:^7}\n\
     {'server_epochs':^17}:{args.server_epochs:^7}\n\
     {'alpha':^17}:{args.alpha:^7}\n\
+    {'a':^17}:{args.a:^7}\n\
+    {'temperature':^17}:{temperature:^7}\n\
     {'dataset':^17}:{args.dataset:^7}\n\
     {'model_structure':^17}:{args.model_structure:^7}"
 log.info(message)
@@ -48,7 +57,7 @@ server_train_set, server_test_set, n_targets, in_channel, public_data = dirichle
     alpha=args.alpha,
     n_clients=args.n_server,
     n_public=args.n_public_data,
-    avg=False
+    avg=True
 )
 
 train_set = {}
@@ -63,12 +72,15 @@ for i, dataset_ in train_set.items():
                                  batch_size=args.batch_size,
                                  num_workers=8,
                                  shuffle=True)
-test_loader = {}
-for i, dataset_ in server_test_set.items():
-    test_loader[i] = DataLoader(dataset=dataset_,
+test_loader = DataLoader(dataset=server_test_set,
                                 batch_size=1000,
                                 pin_memory=True,
                                 num_workers=8)
+public_loader = DataLoader(dataset=public_data,
+                           batch_size=args.n_public_data,
+                           pin_memory=True,
+                           num_workers=8)
+
 
 # %% 3. model initialization
 client_list = model_init(num_client=args.n_client,
@@ -80,29 +92,27 @@ server_list = deepcopy(client_list[::3])
 
 # %% 4. loss function initialization
 CE_Loss = nn.CrossEntropyLoss().cuda()
+KL_Loss = nn.KLDivLoss(reduction='batchmean').cuda()
+Softmax = nn.Softmax(dim=-1).cuda()
+LogSoftmax = nn.LogSoftmax(dim=-1).cuda()
 
 
 # %% 5. model training and distillation
-# init_acc = [eval_model(client_list[0], test_loader[client_server[0]]),]
-# acc = {cid: deepcopy(init_acc) for cid in range(args.n_client)}
-# acc_server = {sid: deepcopy(init_acc) for sid in range(args.n_server)}
 acc = {}
 for cid, client in enumerate(client_list):
-    acc[cid] = [eval_model(client, test_loader[client_server[cid]]),]
+    acc[cid] = [eval_model(client, test_loader),]
 acc_server = {}
 for sid, server in enumerate(server_list):
-    acc_server[sid] = [eval_model(server, test_loader[sid]),]
-# lr_all = [1e-3, 5e-4, 1e-4, 5e-5, 1e-6]
-msg_local = '[server epoch {}, client {}, local train]'
-msg_test_local = 'local epoch {}, acc: {:.4f}'
-msg_test_server = 'server epoch {}, acc {:.4f}'
+    acc_server[sid] = [eval_model(server, test_loader),]
 for server_epoch in range(args.server_epochs):
     # local train
+    msg_local = '[rank: {}, server epoch {}, client {}, local train]'
+    msg_test_local = 'rank: {}, local epoch {}, acc: {:.4f}'
     client_list_ = []
-    # lr = lr_all[server_epoch // (server_epochs // 5)]
+    # lr = 1e-3 / (server_epoch + 1)
     lr = 1e-4
     for cid, client in enumerate(client_list):
-        log.info(msg_local.format(server_epoch + 1, cid + 1))
+        log.info(msg_local.format(rank, server_epoch + 1, cid + 1))
         client_ = client.cuda()
         optimizer = torch.optim.Adam(params=client_.parameters(), lr=lr)
         for local_epoch in range(args.local_epochs):
@@ -114,31 +124,74 @@ for server_epoch in range(args.server_epochs):
                 optimizer.step()
 
             # test
-            acc_ = eval_model(client_, test_loader[client_server[cid]])
+            acc_ = eval_model(client_, test_loader)
             acc[cid].append(acc_)
-            log.info(msg_test_local.format(local_epoch + 1, acc_))
+            log.info(msg_test_local.format(
+                rank, local_epoch + 1, acc[cid][-1]))
         client_list_.append(deepcopy(client_))
     client_list = deepcopy(client_list_)
 
-    client_list__ = []
+    client_list_ = []
     for sid, clients in enumerate(server_client):
-        client_list_ = [client_list[cid] for cid in clients]
-        agg_list = aggregate(client_list_)
-        # print(clients, sid, len(agg_list), len(client_list_))
-        client_list__.extend(deepcopy(agg_list))
-        server_list[sid] = deepcopy(agg_list[0])
-        acc_ = eval_model(server_list[sid], test_loader[sid])
+        client_list__ = [client_list[i] for i in clients]
+        agg_list = aggregate(client_list__)
+        client_list_.extend(agg_list)
+        server = deepcopy(agg_list[0])
+        server_list[sid] = server
+        acc_ = eval_model(server, test_loader)
         acc_server[sid].append(acc_)
-        log.info(msg_test_server.format(server_epoch + 1, acc_))
-    client_list = deepcopy(client_list__)
+    client_list = deepcopy(client_list_)
 
-save_path = f'./res/normal_seed_{args.seed}_' + \
+    server_list_ = []
+    msg_dist = '[rank: {}, server epoch {}, distill train]'
+    msg_test_dist = 'rank: {}, server: {}, distill epoch {}, acc: {:.4f}'
+    for sid, server in enumerate(server_list):
+        log.info(msg_dist.format(rank, server_epoch + 1))
+        server_list_ = deepcopy(server_list)
+        server_list_.pop(sid)
+        server_list__ = [model.cuda() for model in server_list_]
+        optimizer = torch.optim.Adam(params=server.parameters(), lr=lr)
+        for distill_epoch in range(args.distill_epochs):
+            for data_, target_ in public_loader:
+                data_ = data_.cuda()
+                logits = torch.zeros(size=[data_.shape[0], n_targets]).cuda()
+                for server_ in server_list__:
+                    logits += server_(data_).detach()
+                logits /= (args.n_server - 1)
+                optimizer.zero_grad()
+                output_ = server(data_)
+                loss_ce = CE_Loss(output_, target_.cuda())
+                loss_kl = KL_Loss(LogSoftmax(output_/temperature),
+                                  Softmax(logits/temperature))
+                loss = args.a * loss_kl + (1 - args.a) * loss_ce
+                loss.backward()
+                optimizer.step()
+
+            # test
+            acc_ = eval_model(server, test_loader)
+            acc_server[sid].append(acc_)
+            log.info(msg_test_dist.format(rank, sid, distill_epoch + 1, acc_))
+        server_list_.append(deepcopy(server))
+    server_list = deepcopy(server_list_)
+
+    client_list_ = []
+    for sid, server in enumerate(server_list):
+        for cid in server_client:
+            client_list_.append(server)
+    client_list = deepcopy(client_list_)
+
+
+# %% 6. save
+save_path = f'./res/hyper_fed1_seed_{args.seed}_' + \
     f'alpha_{args.alpha}_' + \
     f'dataset_{args.dataset}_' + \
     f'model_structure_{args.model_structure}/'
 file_name = save_path + \
+    f'a_{args.a}_' + \
+    f'T_{temperature}_' + \
     f'local_epochs_{args.local_epochs}_' + \
     f'server_epochs_{args.server_epochs}_' + \
+    f'distill_epochs_{args.distill_epochs}_' + \
     f'batch_size_{args.batch_size}.pt'
 os.makedirs(save_path, exist_ok=True)
 torch.save(obj={'acc': acc,
@@ -148,3 +201,4 @@ log.info(f'results saved in {file_name}.')
 t_end = time.time()
 time_cost = time.strftime("%H:%M:%S", time.gmtime(t_end - t_start))
 log.info(f'time cost: {time_cost}')
+comm.barrier()

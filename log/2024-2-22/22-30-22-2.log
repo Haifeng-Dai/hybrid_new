@@ -1,0 +1,211 @@
+[2024-02-22 22:30:22] [INFO] hyper_fed1
+      n_public_data  : 1000  
+          seed       : 10000 
+      local_epochs   :  10   
+     distill_epochs  :  10   
+       batch_size    :  160  
+      server_epochs  :  20   
+          alpha      :  1.0  
+            a        :  1.0  
+       temperature   :  15   
+         dataset     :cifar10
+     model_structure : cnn3  
+[2024-02-22 22:30:56] [INFO] [rank: 2, server epoch 1, client 1, local train]
+[2024-02-22 22:30:58] [INFO] rank: 2, local epoch 1, acc: 0.2074
+[2024-02-22 22:31:00] [INFO] rank: 2, local epoch 2, acc: 0.2405
+[2024-02-22 22:31:02] [INFO] rank: 2, local epoch 3, acc: 0.2688
+[2024-02-22 22:31:04] [INFO] rank: 2, local epoch 4, acc: 0.2910
+[2024-02-22 22:31:06] [INFO] rank: 2, local epoch 5, acc: 0.3083
+[2024-02-22 22:31:09] [INFO] rank: 2, local epoch 6, acc: 0.3140
+[2024-02-22 22:31:11] [INFO] rank: 2, local epoch 7, acc: 0.3046
+[2024-02-22 22:31:13] [INFO] rank: 2, local epoch 8, acc: 0.3303
+[2024-02-22 22:31:15] [INFO] rank: 2, local epoch 9, acc: 0.3367
+[2024-02-22 22:31:18] [INFO] rank: 2, local epoch 10, acc: 0.3413
+[2024-02-22 22:31:18] [INFO] [rank: 2, server epoch 1, client 2, local train]
+[2024-02-22 22:31:20] [INFO] rank: 2, local epoch 1, acc: 0.1944
+[2024-02-22 22:31:23] [INFO] rank: 2, local epoch 2, acc: 0.2354
+[2024-02-22 22:31:25] [INFO] rank: 2, local epoch 3, acc: 0.2781
+[2024-02-22 22:31:27] [INFO] rank: 2, local epoch 4, acc: 0.3058
+[2024-02-22 22:31:29] [INFO] rank: 2, local epoch 5, acc: 0.3135
+[2024-02-22 22:31:32] [INFO] rank: 2, local epoch 6, acc: 0.3196
+[2024-02-22 22:31:34] [INFO] rank: 2, local epoch 7, acc: 0.3274
+[2024-02-22 22:31:36] [INFO] rank: 2, local epoch 8, acc: 0.3314
+[2024-02-22 22:31:38] [INFO] rank: 2, local epoch 9, acc: 0.3337
+[2024-02-22 22:31:40] [INFO] rank: 2, local epoch 10, acc: 0.3404
+[2024-02-22 22:31:40] [INFO] [rank: 2, server epoch 1, client 3, local train]
+[2024-02-22 22:31:42] [INFO] rank: 2, local epoch 1, acc: 0.2113
+[2024-02-22 22:31:44] [INFO] rank: 2, local epoch 2, acc: 0.2373
+[2024-02-22 22:31:46] [INFO] rank: 2, local epoch 3, acc: 0.2581
+[2024-02-22 22:31:48] [INFO] rank: 2, local epoch 4, acc: 0.2859
+[2024-02-22 22:31:50] [INFO] rank: 2, local epoch 5, acc: 0.2969
+[2024-02-22 22:31:52] [INFO] rank: 2, local epoch 6, acc: 0.3138
+[2024-02-22 22:31:54] [INFO] rank: 2, local epoch 7, acc: 0.3358
+[2024-02-22 22:31:56] [INFO] rank: 2, local epoch 8, acc: 0.3271
+[2024-02-22 22:31:58] [INFO] rank: 2, local epoch 9, acc: 0.3310
+[2024-02-22 22:32:00] [INFO] rank: 2, local epoch 10, acc: 0.3461
+[2024-02-22 22:32:00] [INFO] [rank: 2, server epoch 1, client 4, local train]
+[2024-02-22 22:32:03] [INFO] rank: 2, local epoch 1, acc: 0.1930
+[2024-02-22 22:32:05] [INFO] rank: 2, local epoch 2, acc: 0.2797
+[2024-02-22 22:32:07] [INFO] rank: 2, local epoch 3, acc: 0.3029
+[2024-02-22 22:32:10] [INFO] rank: 2, local epoch 4, acc: 0.3269
+[2024-02-22 22:32:13] [INFO] rank: 2, local epoch 5, acc: 0.3423
+[2024-02-22 22:32:16] [INFO] rank: 2, local epoch 6, acc: 0.3626
+[2024-02-22 22:32:19] [INFO] rank: 2, local epoch 7, acc: 0.3737
+[2024-02-22 22:32:21] [INFO] rank: 2, local epoch 8, acc: 0.3795
+[2024-02-22 22:32:24] [INFO] rank: 2, local epoch 9, acc: 0.3947
+[2024-02-22 22:32:27] [INFO] rank: 2, local epoch 10, acc: 0.3939
+[2024-02-22 22:32:27] [INFO] [rank: 2, server epoch 1, client 5, local train]
+[2024-02-22 22:32:29] [INFO] rank: 2, local epoch 1, acc: 0.1987
+[2024-02-22 22:32:32] [INFO] rank: 2, local epoch 2, acc: 0.2589
+[2024-02-22 22:32:34] [INFO] rank: 2, local epoch 3, acc: 0.3109
+[2024-02-22 22:32:36] [INFO] rank: 2, local epoch 4, acc: 0.3290
+[2024-02-22 22:32:38] [INFO] rank: 2, local epoch 5, acc: 0.3329
+[2024-02-22 22:32:41] [INFO] rank: 2, local epoch 6, acc: 0.3452
+[2024-02-22 22:32:43] [INFO] rank: 2, local epoch 7, acc: 0.3670
+[2024-02-22 22:32:46] [INFO] rank: 2, local epoch 8, acc: 0.3922
+[2024-02-22 22:32:48] [INFO] rank: 2, local epoch 9, acc: 0.4006
+[2024-02-22 22:32:50] [INFO] rank: 2, local epoch 10, acc: 0.3900
+[2024-02-22 22:32:50] [INFO] [rank: 2, server epoch 1, client 6, local train]
+[2024-02-22 22:32:53] [INFO] rank: 2, local epoch 1, acc: 0.1841
+[2024-02-22 22:32:55] [INFO] rank: 2, local epoch 2, acc: 0.2771
+[2024-02-22 22:32:57] [INFO] rank: 2, local epoch 3, acc: 0.3121
+[2024-02-22 22:33:00] [INFO] rank: 2, local epoch 4, acc: 0.3222
+[2024-02-22 22:33:02] [INFO] rank: 2, local epoch 5, acc: 0.3322
+[2024-02-22 22:33:04] [INFO] rank: 2, local epoch 6, acc: 0.3420
+[2024-02-22 22:33:07] [INFO] rank: 2, local epoch 7, acc: 0.3629
+[2024-02-22 22:33:09] [INFO] rank: 2, local epoch 8, acc: 0.3688
+[2024-02-22 22:33:11] [INFO] rank: 2, local epoch 9, acc: 0.3821
+[2024-02-22 22:33:14] [INFO] rank: 2, local epoch 10, acc: 0.3914
+[2024-02-22 22:33:14] [INFO] [rank: 2, server epoch 1, client 7, local train]
+[2024-02-22 22:33:16] [INFO] rank: 2, local epoch 1, acc: 0.1892
+[2024-02-22 22:33:19] [INFO] rank: 2, local epoch 2, acc: 0.2184
+[2024-02-22 22:33:21] [INFO] rank: 2, local epoch 3, acc: 0.2607
+[2024-02-22 22:33:24] [INFO] rank: 2, local epoch 4, acc: 0.2725
+[2024-02-22 22:33:26] [INFO] rank: 2, local epoch 5, acc: 0.2664
+[2024-02-22 22:33:29] [INFO] rank: 2, local epoch 6, acc: 0.3003
+[2024-02-22 22:33:32] [INFO] rank: 2, local epoch 7, acc: 0.3232
+[2024-02-22 22:33:34] [INFO] rank: 2, local epoch 8, acc: 0.3110
+[2024-02-22 22:33:36] [INFO] rank: 2, local epoch 9, acc: 0.3337
+[2024-02-22 22:33:38] [INFO] rank: 2, local epoch 10, acc: 0.3330
+[2024-02-22 22:33:38] [INFO] [rank: 2, server epoch 1, client 8, local train]
+[2024-02-22 22:33:41] [INFO] rank: 2, local epoch 1, acc: 0.1914
+[2024-02-22 22:33:43] [INFO] rank: 2, local epoch 2, acc: 0.2130
+[2024-02-22 22:33:45] [INFO] rank: 2, local epoch 3, acc: 0.2517
+[2024-02-22 22:33:48] [INFO] rank: 2, local epoch 4, acc: 0.2787
+[2024-02-22 22:33:50] [INFO] rank: 2, local epoch 5, acc: 0.3144
+[2024-02-22 22:33:52] [INFO] rank: 2, local epoch 6, acc: 0.3005
+[2024-02-22 22:33:54] [INFO] rank: 2, local epoch 7, acc: 0.2974
+[2024-02-22 22:33:57] [INFO] rank: 2, local epoch 8, acc: 0.3223
+[2024-02-22 22:33:59] [INFO] rank: 2, local epoch 9, acc: 0.3273
+[2024-02-22 22:34:01] [INFO] rank: 2, local epoch 10, acc: 0.3298
+[2024-02-22 22:34:01] [INFO] [rank: 2, server epoch 1, client 9, local train]
+[2024-02-22 22:34:04] [INFO] rank: 2, local epoch 1, acc: 0.1934
+[2024-02-22 22:34:06] [INFO] rank: 2, local epoch 2, acc: 0.2136
+[2024-02-22 22:34:08] [INFO] rank: 2, local epoch 3, acc: 0.2393
+[2024-02-22 22:34:10] [INFO] rank: 2, local epoch 4, acc: 0.2734
+[2024-02-22 22:34:13] [INFO] rank: 2, local epoch 5, acc: 0.2832
+[2024-02-22 22:34:15] [INFO] rank: 2, local epoch 6, acc: 0.3134
+[2024-02-22 22:34:18] [INFO] rank: 2, local epoch 7, acc: 0.3045
+[2024-02-22 22:34:21] [INFO] rank: 2, local epoch 8, acc: 0.3093
+[2024-02-22 22:34:23] [INFO] rank: 2, local epoch 9, acc: 0.3086
+[2024-02-22 22:34:26] [INFO] rank: 2, local epoch 10, acc: 0.3292
+[2024-02-22 22:34:30] [INFO] [rank: 2, server epoch 1, distill train]
+[2024-02-22 22:34:32] [INFO] rank: 2, server: 0, distill epoch 1, acc: 0.3535
+[2024-02-22 22:34:34] [INFO] rank: 2, server: 0, distill epoch 2, acc: 0.3549
+[2024-02-22 22:34:36] [INFO] rank: 2, server: 0, distill epoch 3, acc: 0.3505
+[2024-02-22 22:34:38] [INFO] rank: 2, server: 0, distill epoch 4, acc: 0.3528
+[2024-02-22 22:34:40] [INFO] rank: 2, server: 0, distill epoch 5, acc: 0.3606
+[2024-02-22 22:34:43] [INFO] rank: 2, server: 0, distill epoch 6, acc: 0.3687
+[2024-02-22 22:34:45] [INFO] rank: 2, server: 0, distill epoch 7, acc: 0.3646
+[2024-02-22 22:34:47] [INFO] rank: 2, server: 0, distill epoch 8, acc: 0.3595
+[2024-02-22 22:34:49] [INFO] rank: 2, server: 0, distill epoch 9, acc: 0.3522
+[2024-02-22 22:34:51] [INFO] rank: 2, server: 0, distill epoch 10, acc: 0.3451
+[2024-02-22 22:34:51] [INFO] [rank: 2, server epoch 1, distill train]
+[2024-02-22 22:34:53] [INFO] rank: 2, server: 1, distill epoch 1, acc: 0.4061
+[2024-02-22 22:34:55] [INFO] rank: 2, server: 1, distill epoch 2, acc: 0.4240
+[2024-02-22 22:34:57] [INFO] rank: 2, server: 1, distill epoch 3, acc: 0.4293
+[2024-02-22 22:34:59] [INFO] rank: 2, server: 1, distill epoch 4, acc: 0.4202
+[2024-02-22 22:35:01] [INFO] rank: 2, server: 1, distill epoch 5, acc: 0.3951
+[2024-02-22 22:35:03] [INFO] rank: 2, server: 1, distill epoch 6, acc: 0.3668
+[2024-02-22 22:35:05] [INFO] rank: 2, server: 1, distill epoch 7, acc: 0.3398
+[2024-02-22 22:35:08] [INFO] rank: 2, server: 1, distill epoch 8, acc: 0.3209
+[2024-02-22 22:35:10] [INFO] rank: 2, server: 1, distill epoch 9, acc: 0.3050
+[2024-02-22 22:35:12] [INFO] rank: 2, server: 1, distill epoch 10, acc: 0.2929
+[2024-02-22 22:35:12] [INFO] [rank: 2, server epoch 1, distill train]
+[2024-02-22 22:35:15] [INFO] rank: 2, server: 2, distill epoch 1, acc: 0.3413
+[2024-02-22 22:35:17] [INFO] rank: 2, server: 2, distill epoch 2, acc: 0.3408
+[2024-02-22 22:35:19] [INFO] rank: 2, server: 2, distill epoch 3, acc: 0.3358
+[2024-02-22 22:35:22] [INFO] rank: 2, server: 2, distill epoch 4, acc: 0.3253
+[2024-02-22 22:35:24] [INFO] rank: 2, server: 2, distill epoch 5, acc: 0.3231
+[2024-02-22 22:35:26] [INFO] rank: 2, server: 2, distill epoch 6, acc: 0.3243
+[2024-02-22 22:35:28] [INFO] rank: 2, server: 2, distill epoch 7, acc: 0.3209
+[2024-02-22 22:35:31] [INFO] rank: 2, server: 2, distill epoch 8, acc: 0.3217
+[2024-02-22 22:35:33] [INFO] rank: 2, server: 2, distill epoch 9, acc: 0.3211
+[2024-02-22 22:35:35] [INFO] rank: 2, server: 2, distill epoch 10, acc: 0.3221
+[2024-02-22 22:35:35] [INFO] [rank: 2, server epoch 2, client 1, local train]
+[2024-02-22 22:35:38] [INFO] rank: 2, local epoch 1, acc: 0.3525
+[2024-02-22 22:35:40] [INFO] rank: 2, local epoch 2, acc: 0.3463
+[2024-02-22 22:35:42] [INFO] rank: 2, local epoch 3, acc: 0.3446
+[2024-02-22 22:35:45] [INFO] rank: 2, local epoch 4, acc: 0.3463
+[2024-02-22 22:35:47] [INFO] rank: 2, local epoch 5, acc: 0.3587
+[2024-02-22 22:35:50] [INFO] rank: 2, local epoch 6, acc: 0.3641
+[2024-02-22 22:35:52] [INFO] rank: 2, local epoch 7, acc: 0.3683
+[2024-02-22 22:35:55] [INFO] rank: 2, local epoch 8, acc: 0.3782
+[2024-02-22 22:35:57] [INFO] rank: 2, local epoch 9, acc: 0.3772
+[2024-02-22 22:36:00] [INFO] rank: 2, local epoch 10, acc: 0.3817
+[2024-02-22 22:36:00] [INFO] [rank: 2, server epoch 2, client 2, local train]
+[2024-02-22 22:36:02] [INFO] rank: 2, local epoch 1, acc: 0.3785
+[2024-02-22 22:36:04] [INFO] rank: 2, local epoch 2, acc: 0.3761
+[2024-02-22 22:36:07] [INFO] rank: 2, local epoch 3, acc: 0.3788
+[2024-02-22 22:36:09] [INFO] rank: 2, local epoch 4, acc: 0.3901
+[2024-02-22 22:36:11] [INFO] rank: 2, local epoch 5, acc: 0.3972
+[2024-02-22 22:36:14] [INFO] rank: 2, local epoch 6, acc: 0.3931
+[2024-02-22 22:36:16] [INFO] rank: 2, local epoch 7, acc: 0.3952
+[2024-02-22 22:36:18] [INFO] rank: 2, local epoch 8, acc: 0.3955
+[2024-02-22 22:36:21] [INFO] rank: 2, local epoch 9, acc: 0.3938
+[2024-02-22 22:36:23] [INFO] rank: 2, local epoch 10, acc: 0.3985
+[2024-02-22 22:36:23] [INFO] [rank: 2, server epoch 2, client 3, local train]
+[2024-02-22 22:36:26] [INFO] rank: 2, local epoch 1, acc: 0.4033
+[2024-02-22 22:36:28] [INFO] rank: 2, local epoch 2, acc: 0.4044
+[2024-02-22 22:36:30] [INFO] rank: 2, local epoch 3, acc: 0.4077
+[2024-02-22 22:36:32] [INFO] rank: 2, local epoch 4, acc: 0.4087
+[2024-02-22 22:36:35] [INFO] rank: 2, local epoch 5, acc: 0.4170
+[2024-02-22 22:36:37] [INFO] rank: 2, local epoch 6, acc: 0.4242
+[2024-02-22 22:36:39] [INFO] rank: 2, local epoch 7, acc: 0.4277
+[2024-02-22 22:36:42] [INFO] rank: 2, local epoch 8, acc: 0.4133
+[2024-02-22 22:36:44] [INFO] rank: 2, local epoch 9, acc: 0.4110
+[2024-02-22 22:36:47] [INFO] rank: 2, local epoch 10, acc: 0.4138
+[2024-02-22 22:36:47] [INFO] [rank: 2, server epoch 2, client 4, local train]
+[2024-02-22 22:36:49] [INFO] rank: 2, local epoch 1, acc: 0.3870
+[2024-02-22 22:36:52] [INFO] rank: 2, local epoch 2, acc: 0.4125
+[2024-02-22 22:36:54] [INFO] rank: 2, local epoch 3, acc: 0.4217
+[2024-02-22 22:36:57] [INFO] rank: 2, local epoch 4, acc: 0.4196
+[2024-02-22 22:36:59] [INFO] rank: 2, local epoch 5, acc: 0.4216
+[2024-02-22 22:37:02] [INFO] rank: 2, local epoch 6, acc: 0.4206
+[2024-02-22 22:37:04] [INFO] rank: 2, local epoch 7, acc: 0.4361
+[2024-02-22 22:37:07] [INFO] rank: 2, local epoch 8, acc: 0.4419
+[2024-02-22 22:37:10] [INFO] rank: 2, local epoch 9, acc: 0.4537
+[2024-02-22 22:37:12] [INFO] rank: 2, local epoch 10, acc: 0.4447
+[2024-02-22 22:37:12] [INFO] [rank: 2, server epoch 2, client 5, local train]
+[2024-02-22 22:37:15] [INFO] rank: 2, local epoch 1, acc: 0.4518
+[2024-02-22 22:37:17] [INFO] rank: 2, local epoch 2, acc: 0.4692
+[2024-02-22 22:37:20] [INFO] rank: 2, local epoch 3, acc: 0.4569
+[2024-02-22 22:37:23] [INFO] rank: 2, local epoch 4, acc: 0.4535
+[2024-02-22 22:37:25] [INFO] rank: 2, local epoch 5, acc: 0.4605
+[2024-02-22 22:37:28] [INFO] rank: 2, local epoch 6, acc: 0.4658
+[2024-02-22 22:37:31] [INFO] rank: 2, local epoch 7, acc: 0.4766
+[2024-02-22 22:37:33] [INFO] rank: 2, local epoch 8, acc: 0.4736
+[2024-02-22 22:37:36] [INFO] rank: 2, local epoch 9, acc: 0.4761
+[2024-02-22 22:37:39] [INFO] rank: 2, local epoch 10, acc: 0.4826
+[2024-02-22 22:37:39] [INFO] [rank: 2, server epoch 2, client 6, local train]
+[2024-02-22 22:37:42] [INFO] rank: 2, local epoch 1, acc: 0.4952
+[2024-02-22 22:37:44] [INFO] rank: 2, local epoch 2, acc: 0.4740
+[2024-02-22 22:37:47] [INFO] rank: 2, local epoch 3, acc: 0.5027
+[2024-02-22 22:37:49] [INFO] rank: 2, local epoch 4, acc: 0.4870
+[2024-02-22 22:37:52] [INFO] rank: 2, local epoch 5, acc: 0.4725
+[2024-02-22 22:37:54] [INFO] rank: 2, local epoch 6, acc: 0.5001
+[2024-02-22 22:37:57] [INFO] rank: 2, local epoch 7, acc: 0.4907
+[2024-02-22 22:37:59] [INFO] rank: 2, local epoch 8, acc: 0.5046
+[2024-02-22 22:38:02] [INFO] rank: 2, local epoch 9, acc: 0.5005
+[2024-02-22 22:38:04] [INFO] rank: 2, local epoch 10, acc: 0.5144
+[2024-02-22 22:38:04] [INFO] [rank: 2, server epoch 2, client 7, local train]

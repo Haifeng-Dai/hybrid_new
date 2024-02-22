@@ -1,4 +1,4 @@
-a=(1.0 0.5 0)   # (1.0 0.5)
+a=(1.0 0.5)   # (1.0 0.5)
 temperature1=5 # (1 5 10)
 temperature2=10
 temperature3=15
@@ -16,7 +16,7 @@ device=2
 for a_ in ${a[@]}; do
   # for temperature_ in ${temperature[@]}; do
   # for model_structure_ in ${model_structure[@]}; do
-  mpiexec -np 3 python hyper_fed.py \
+  mpiexec -np 3 python hyper_fed2.py \
     --a $a_ \
     --temperature $temperature1 $temperature2 $temperature3 \
     --n_public_data $n_public_data \
