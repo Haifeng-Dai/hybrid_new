@@ -146,12 +146,13 @@ for server_epoch in range(args.server_epochs):
 
     server_list_ = []
     msg_dist = '[rank: {}, server epoch {}, distill train]'
-    msg_test_dist = 'rank: {}, distill epoch {}, acc: {:.4f}'
+    msg_test_dist = 'rank: {}, server: {}, distill epoch {}, acc: {:.4f}'
     for sid, server in enumerate(server_list):
         log.info(msg_dist.format(rank, server_epoch + 1))
         server_list_ = deepcopy(server_list)
         server_list_.pop(sid)
         server_list__ = [model.cuda() for model in server_list_]
+        optimizer = torch.optim.Adam(params=server.parameters(), lr=lr)
         for distill_epoch in range(args.distill_epochs):
             for data_, target_ in public_loader:
                 data_ = data_.cuda()
@@ -159,7 +160,6 @@ for server_epoch in range(args.server_epochs):
                 for server_ in server_list__:
                     logits += server_(data_).detach()
                 logits /= (args.n_server - 1)
-                optimizer = torch.optim.Adam(params=server.parameters(), lr=lr)
                 optimizer.zero_grad()
                 output_ = server(data_)
                 loss_ce = CE_Loss(output_, target_.cuda())
@@ -172,7 +172,7 @@ for server_epoch in range(args.server_epochs):
             # test
             acc_ = eval_model(server, test_loader[sid])
             acc_server[sid].append(acc_)
-            log.info(msg_test_dist.format(rank, distill_epoch + 1, acc_))
+            log.info(msg_test_dist.format(rank, sid, distill_epoch + 1, acc_))
         server_list_.append(deepcopy(server))
     server_list = deepcopy(server_list_)
 
@@ -180,6 +180,7 @@ for server_epoch in range(args.server_epochs):
     for sid, server in enumerate(server_list):
         for cid in server_client:
             client_list_.append(server)
+    client_list = deepcopy(client_list_)
 
     # client_list_ = []
     # msg_dist = '[rank: {}, server epoch {}, client {}, distill train]'

@@ -1,12 +1,12 @@
-a=(1.0)   # (1.0 0.5)
+a=(1.0 0.5)   # (1.0 0.5)
 temperature1=5 # (1 5 10)
 temperature2=10
 temperature3=15
 n_public_data=100
 seed=10000
-local_epochs=1
-distill_epochs=1
-server_epochs=2
+local_epochs=10
+distill_epochs=10
+server_epochs=20
 batch_size=160
 alpha=1
 dataset='cifar10'

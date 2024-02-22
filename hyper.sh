@@ -1,4 +1,4 @@
-a=(1.0 0.5)   # (1.0 0.5)
+a=(1.0 0.5 0)   # (1.0 0.5)
 temperature1=5 # (1 5 10)
 temperature2=10
 temperature3=15
