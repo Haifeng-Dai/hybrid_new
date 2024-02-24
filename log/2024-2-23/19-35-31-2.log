@@ -1,0 +1,38 @@
+[2024-02-23 19:35:32] [INFO] hyper_fed2
+      n_public_data  : 1000  
+          seed       : 10000 
+      local_epochs   :  10   
+     distill_epochs  :  10   
+       batch_size    :  160  
+      server_epochs  :  20   
+          alpha      :  1.0  
+            a        :  0.5  
+       temperature   :   0   
+         dataset     :cifar10
+     model_structure : cnn3  
+[2024-02-23 19:35:57] [INFO] [rank: 2, server epoch 1, client 1, local train]
+[2024-02-23 19:35:59] [INFO] rank: 2, local epoch 1, acc: 0.3937
+[2024-02-23 19:36:01] [INFO] rank: 2, local epoch 2, acc: 0.4565
+[2024-02-23 19:36:02] [INFO] rank: 2, local epoch 3, acc: 0.4925
+[2024-02-23 19:36:04] [INFO] rank: 2, local epoch 4, acc: 0.5148
+[2024-02-23 19:36:06] [INFO] rank: 2, local epoch 5, acc: 0.5326
+[2024-02-23 19:36:07] [INFO] rank: 2, local epoch 6, acc: 0.5496
+[2024-02-23 19:36:09] [INFO] rank: 2, local epoch 7, acc: 0.5375
+[2024-02-23 19:36:11] [INFO] rank: 2, local epoch 8, acc: 0.5662
+[2024-02-23 19:36:12] [INFO] rank: 2, local epoch 9, acc: 0.5768
+[2024-02-23 19:36:14] [INFO] rank: 2, local epoch 10, acc: 0.5844
+[2024-02-23 19:36:14] [INFO] [rank: 2, server epoch 1, client 2, local train]
+[2024-02-23 19:36:16] [INFO] rank: 2, local epoch 1, acc: 0.3742
+[2024-02-23 19:36:17] [INFO] rank: 2, local epoch 2, acc: 0.4524
+[2024-02-23 19:36:19] [INFO] rank: 2, local epoch 3, acc: 0.4824
+[2024-02-23 19:36:21] [INFO] rank: 2, local epoch 4, acc: 0.5196
+[2024-02-23 19:36:23] [INFO] rank: 2, local epoch 5, acc: 0.5358
+[2024-02-23 19:36:24] [INFO] rank: 2, local epoch 6, acc: 0.5476
+[2024-02-23 19:36:26] [INFO] rank: 2, local epoch 7, acc: 0.5435
+[2024-02-23 19:36:28] [INFO] rank: 2, local epoch 8, acc: 0.5585
+[2024-02-23 19:36:29] [INFO] rank: 2, local epoch 9, acc: 0.5691
+[2024-02-23 19:36:31] [INFO] rank: 2, local epoch 10, acc: 0.5808
+[2024-02-23 19:36:31] [INFO] [rank: 2, server epoch 1, client 3, local train]
+[2024-02-23 19:36:33] [INFO] rank: 2, local epoch 1, acc: 0.3953
+[2024-02-23 19:36:34] [INFO] rank: 2, local epoch 2, acc: 0.4516
+[2024-02-23 19:36:36] [INFO] rank: 2, local epoch 3, acc: 0.4787

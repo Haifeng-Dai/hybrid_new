@@ -30,7 +30,7 @@ setup_seed(args.seed)
 server_client = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
 client_server = [0] * 3 + [1] * 3 + [2] * 3
 
-message = 'fed_avg' + f"\n\
+message = 'fedavg_pub' + f"\n\
     {'n_client':^17}:{args.n_client:^7}\n\
     {'seed':^17}:{args.seed:^7}\n\
     {'local_epochs':^17}:{args.local_epochs:^7}\n\

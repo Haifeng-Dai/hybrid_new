@@ -1,0 +1,9 @@
+[2024-02-23 17:11:27] [INFO] mllsgd
+        n_client     :   9   
+          seed       : 10000 
+      local_epochs   :  10   
+       batch_size    :  160  
+      server_epochs  :  20   
+          alpha      :  1.0  
+         dataset     :cifar10
+     model_structure : cnn3  

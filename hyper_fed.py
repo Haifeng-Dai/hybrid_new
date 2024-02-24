@@ -29,7 +29,7 @@ log = get_logger(log_path)
 # %% 1. basic parameters
 args = get_args()
 args.device = rank
-temperature = int(args.temperature[rank])
+temperature = args.temperature[rank]
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ['CUDA_VISIBLE_DEVICES'] = str(args.device)
 setup_seed(args.seed)
@@ -89,7 +89,7 @@ client_list = model_init(num_client=args.n_client,
                          model_structure=args.model_structure,
                          num_target=n_targets,
                          in_channel=in_channel)
-server = deepcopy(client_list[::3])
+server_list = deepcopy(client_list[::3])
 
 
 # %% 4. loss function initialization
@@ -101,8 +101,11 @@ LogSoftmax = nn.LogSoftmax(dim=-1).cuda()
 
 # %% 5. model training and distillation
 acc = {}
-for cid in range(args.n_client):
-    acc[cid] = [eval_model(client_list[cid], test_loader[client_server[cid]]),]
+for cid, client in enumerate(client_list):
+    acc[cid] = [eval_model(client, test_loader[client_server[cid]]),]
+acc_server = {}
+for sid, server in enumerate(server_list):
+    acc_server[sid] = [eval_model(server, test_loader[sid]),]
 for server_epoch in range(args.server_epochs):
     # local train
     msg_local = '[rank: {}, server epoch {}, client {}, local train]'
@@ -123,39 +126,42 @@ for server_epoch in range(args.server_epochs):
                 optimizer.step()
 
             # test
-            acc[cid].append(eval_model(
-                client_, test_loader[client_server[cid]]))
+            acc_ = eval_model(client_, test_loader[client_server[cid]])
+            acc[cid].append(acc_)
             log.info(msg_test_local.format(
                 rank, local_epoch + 1, acc[cid][-1]))
         client_list_.append(deepcopy(client_))
     client_list = deepcopy(client_list_)
 
-    client_list__ = []
-    for sid, clients in enumerate(server_client):
-        client_list_ = [client_list[i] for i in clients]
-        agg_list = aggregate(client_list_)
-        client_list__.extend(agg_list)
-        server[sid] = deepcopy(agg_list[0])
-    client_list = deepcopy(client_list__)
-
     client_list_ = []
-    msg_dist = '[rank: {}, server epoch {}, client {}, distill train]'
-    msg_test_dist = 'rank: {}, distill epoch {}, acc: {:.4f}'
-    for cid, client in enumerate(client_list):
-        log.info(msg_dist.format(rank, server_epoch+1, cid+1))
-        server_ = deepcopy(server)
-        server_.pop(client_server[cid])
-        client_ = client.cuda()
-        optimizer = torch.optim.Adam(params=client_.parameters(), lr=lr)
+    for sid, clients in enumerate(server_client):
+        client_list__ = [client_list[i] for i in clients]
+        agg_list = aggregate(client_list__)
+        client_list_.extend(agg_list)
+        server = deepcopy(agg_list[0])
+        server_list[sid] = server
+        acc_ = eval_model(server, test_loader[sid])
+        acc_server[sid].append(acc_)
+    client_list = deepcopy(client_list_)
+
+    server_list_ = []
+    msg_dist = '[rank: {}, server epoch {}, distill train]'
+    msg_test_dist = 'rank: {}, server: {}, distill epoch {}, acc: {:.4f}'
+    for sid, server in enumerate(server_list):
+        log.info(msg_dist.format(rank, server_epoch + 1))
+        server_list_ = deepcopy(server_list)
+        server_list_.pop(sid)
+        server_list__ = [model.cuda() for model in server_list_]
+        optimizer = torch.optim.Adam(params=server.parameters(), lr=lr)
         for distill_epoch in range(args.distill_epochs):
             for data_, target_ in public_loader:
                 data_ = data_.cuda()
                 logits = torch.zeros(size=[data_.shape[0], n_targets]).cuda()
-                for model__ in server_:
-                    logits += model__(data_).detach()
+                for server_ in server_list__:
+                    logits += server_(data_).detach()
                 logits /= (args.n_server - 1)
                 optimizer.zero_grad()
-                output_ = client_(data_)
+                output_ = server(data_)
                 loss_ce = CE_Loss(output_, target_.cuda())
                 loss_kl = KL_Loss(LogSoftmax(output_/temperature),
                                   Softmax(logits/temperature))
@@ -164,39 +170,17 @@ for server_epoch in range(args.server_epochs):
                 optimizer.step()
 
             # test
-            model__ = client_
-            acc[cid].append(eval_model(
-                model__, test_loader[client_server[cid]]))
-            log.info(msg_test_dist.format(rank, distill_epoch + 1, acc[i][-1]))
-        client_list_.append(deepcopy(client_))
+            acc_ = eval_model(server, test_loader[sid])
+            acc_server[sid].append(acc_)
+            log.info(msg_test_dist.format(rank, sid, distill_epoch + 1, acc_))
+        server_list_.append(deepcopy(server))
+    server_list = deepcopy(server_list_)
+
+    client_list_ = []
+    for sid, server in enumerate(server_list):
+        for cid in server_client:
+            client_list_.append(server)
     client_list = deepcopy(client_list_)
-
-    client_list__ = []
-    for sid, clients in enumerate(server_client):
-        client_list_ = [client_list[i] for i in clients]
-        agg_list = aggregate(client_list_)
-        client_list__.extend(deepcopy(agg_list))
-        server[sid] = deepcopy(agg_list[0])
-    client_list = deepcopy(client_list__)
-
-for cid, client in enumerate(client_list):
-    log.info(msg_local.format(rank, server_epoch + 1, cid + 1))
-    client_ = client.cuda()
-    optimizer = torch.optim.Adam(params=client_.parameters(), lr=lr)
-    for local_epoch in range(10):
-        for data_, target_ in train_loader[cid]:
-            optimizer.zero_grad()
-            output_ = client_(data_.cuda())
-            loss = CE_Loss(output_, target_.cuda())
-            loss.backward()
-            optimizer.step()
-
-        # test
-        acc[cid].append(eval_model(
-            client_, test_loader[client_server[cid]]))
-        log.info(msg_test_local.format(rank, local_epoch + 1, acc[cid][-1]))
-    client_list_.append(deepcopy(client_))
-client_list = deepcopy(client_list_)
 
 
 # %% 6. save
@@ -213,8 +197,7 @@ file_name = save_path + \
     f'batch_size_{args.batch_size}.pt'
 os.makedirs(save_path, exist_ok=True)
 torch.save(obj={'acc': acc,
-                # 'acc_server': acc_server,
-                'server_model': [server_.state_dict() for server_ in server]},
+                'acc_server': acc_server},
            f=file_name)
 log.info(f'results saved in {file_name}.')
 t_end = time.time()

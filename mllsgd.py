@@ -29,8 +29,9 @@ os.environ['CUDA_VISIBLE_DEVICES'] = str(args.device)
 setup_seed(args.seed)
 server_client = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
 client_server = [0] * 3 + [1] * 3 + [2] * 3
+avg_epochs = 2
 
-message = 'normal' + f"\n\
+message = 'mllsgd' + f"\n\
     {'n_client':^17}:{args.n_client:^7}\n\
     {'seed':^17}:{args.seed:^7}\n\
     {'local_epochs':^17}:{args.local_epochs:^7}\n\
@@ -83,9 +84,6 @@ CE_Loss = nn.CrossEntropyLoss().cuda()
 
 
 # %% 5. model training and distillation
-# init_acc = [eval_model(client_list[0], test_loader[client_server[0]]),]
-# acc = {cid: deepcopy(init_acc) for cid in range(args.n_client)}
-# acc_server = {sid: deepcopy(init_acc) for sid in range(args.n_server)}
 acc = {}
 for cid, client in enumerate(client_list):
     acc[cid] = [eval_model(client, test_loader[client_server[cid]]),]
@@ -95,44 +93,52 @@ for sid, server in enumerate(server_list):
 # lr_all = [1e-3, 5e-4, 1e-4, 5e-5, 1e-6]
 msg_local = '[server epoch {}, client {}, local train]'
 msg_test_local = 'local epoch {}, acc: {:.4f}'
+msg_test_avg = 'avg epoch {}, acc {:.4f}'
 msg_test_server = 'server epoch {}, acc {:.4f}'
 for server_epoch in range(args.server_epochs):
-    # local train
-    client_list_ = []
-    # lr = lr_all[server_epoch // (server_epochs // 5)]
-    lr = 1e-4
-    for cid, client in enumerate(client_list):
-        log.info(msg_local.format(server_epoch + 1, cid + 1))
-        client_ = client.cuda()
-        optimizer = torch.optim.Adam(params=client_.parameters(), lr=lr)
-        for local_epoch in range(args.local_epochs):
-            for data_, target_ in train_loader[cid]:
-                optimizer.zero_grad()
-                output_ = client_(data_.cuda())
-                loss = CE_Loss(output_, target_.cuda())
-                loss.backward()
-                optimizer.step()
+    for avg_epoch in range(avg_epochs):
+        # local train
+        client_list_ = []
+        # lr = lr_all[server_epoch // (server_epochs // 5)]
+        lr = 1e-4
+        for cid, client in enumerate(client_list):
+            log.info(msg_local.format(server_epoch + 1, cid + 1))
+            client_ = client.cuda()
+            optimizer = torch.optim.Adam(params=client_.parameters(), lr=lr)
+            for local_epoch in range(args.local_epochs):
+                for data_, target_ in train_loader[cid]:
+                    optimizer.zero_grad()
+                    output_ = client_(data_.cuda())
+                    loss = CE_Loss(output_, target_.cuda())
+                    loss.backward()
+                    optimizer.step()
 
-            # test
-            acc_ = eval_model(client_, test_loader[client_server[cid]])
-            acc[cid].append(acc_)
-            log.info(msg_test_local.format(local_epoch + 1, acc_))
-        client_list_.append(deepcopy(client_))
-    client_list = deepcopy(client_list_)
+                # test
+                acc_ = eval_model(client_, test_loader[client_server[cid]])
+                acc[cid].append(acc_)
+                log.info(msg_test_local.format(local_epoch + 1, acc_))
+            client_list_.append(deepcopy(client_))
+        client_list = deepcopy(client_list_)
 
-    client_list__ = []
-    for sid, clients in enumerate(server_client):
-        client_list_ = [client_list[cid] for cid in clients]
-        agg_list = aggregate(client_list_)
-        # print(clients, sid, len(agg_list), len(client_list_))
-        client_list__.extend(deepcopy(agg_list))
-        server_list[sid] = deepcopy(agg_list[0])
-        acc_ = eval_model(server_list[sid], test_loader[sid])
+        client_list__ = []
+        for sid, clients in enumerate(server_client):
+            client_list_ = [client_list[cid] for cid in clients]
+            agg_list = aggregate(client_list_)
+            client_list__.extend(deepcopy(agg_list))
+            server_list[sid] = deepcopy(agg_list[0])
+            acc_ = eval_model(server_list[sid], test_loader[sid])
+            acc_server[sid].append(acc_)
+            log.info(msg_test_avg.format(avg_epoch + 1, acc_))
+        client_list = deepcopy(client_list__)
+    server_list = aggregate(server_list)
+    client_list = [deepcopy(server_list[0]) for _ in range(args.n_client)]
+    acc_ = eval_model(server_list[0], test_loader[sid])
+    for sid, _ in enumerate(server_list):
         acc_server[sid].append(acc_)
-        log.info(msg_test_server.format(server_epoch + 1, acc_))
-    client_list = deepcopy(client_list__)
+    log.info(msg_test_server.format(server_epoch + 1, acc_))
 
-save_path = f'./res/normal_seed_{args.seed}_' + \
+
+save_path = f'./res/mllsgd_seed_{args.seed}_' + \
     f'alpha_{args.alpha}_' + \
     f'dataset_{args.dataset}_' + \
     f'model_structure_{args.model_structure}/'

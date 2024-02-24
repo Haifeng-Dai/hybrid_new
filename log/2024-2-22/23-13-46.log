@@ -1,0 +1,26 @@
+[2024-02-22 23:13:46] [INFO] mllsgd
+        n_client     :   9   
+          seed       : 10000 
+      local_epochs   :   1   
+       batch_size    :  160  
+      server_epochs  :   1   
+          alpha      :  1.0  
+         dataset     :cifar10
+     model_structure : cnn3  
+[2024-02-22 23:14:24] [INFO] [server epoch 1, client 1, local train]
+[2024-02-22 23:14:26] [INFO] local epoch 1, acc: 0.2095
+[2024-02-22 23:14:26] [INFO] [server epoch 1, client 2, local train]
+[2024-02-22 23:14:29] [INFO] local epoch 1, acc: 0.2045
+[2024-02-22 23:14:29] [INFO] [server epoch 1, client 3, local train]
+[2024-02-22 23:14:31] [INFO] local epoch 1, acc: 0.2010
+[2024-02-22 23:14:31] [INFO] [server epoch 1, client 4, local train]
+[2024-02-22 23:14:34] [INFO] local epoch 1, acc: 0.2034
+[2024-02-22 23:14:34] [INFO] [server epoch 1, client 5, local train]
+[2024-02-22 23:14:37] [INFO] local epoch 1, acc: 0.1891
+[2024-02-22 23:14:37] [INFO] [server epoch 1, client 6, local train]
+[2024-02-22 23:14:39] [INFO] local epoch 1, acc: 0.1771
+[2024-02-22 23:14:39] [INFO] [server epoch 1, client 7, local train]
+[2024-02-22 23:14:42] [INFO] local epoch 1, acc: 0.1978
+[2024-02-22 23:14:42] [INFO] [server epoch 1, client 8, local train]
+[2024-02-22 23:14:45] [INFO] local epoch 1, acc: 0.1837
+[2024-02-22 23:14:45] [INFO] [server epoch 1, client 9, local train]
